@@ -9,7 +9,10 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
+import { Badge } from '@/components/ui/badge';
 import { JobAnalysisRow } from '@/lib/types';
+import { getStatusBadgeVariant, getRecommendationBadgeVariant, getFilterLabel } from '@/lib/utils';
+import { IA_RECOMMENDATION_FILTERS } from '@/lib/constants';
 
 interface JobsTableProps {
   jobs: JobAnalysisRow[];
@@ -18,24 +21,13 @@ interface JobsTableProps {
 
 export default function JobsTable({ jobs, totalCount }: JobsTableProps) {
   const formatDate = (date: Date) => {
-    return new Date(date).toLocaleDateString('pt-BR', {
+    return new Date(date).toLocaleString('pt-BR', {
       day: '2-digit',
       month: '2-digit',
       year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
     });
-  };
-
-  const getStatusBadgeColor = (status: string) => {
-    const colors: Record<string, string> = {
-      PENDING: 'bg-yellow-100 text-yellow-800',
-      INTERESTED: 'bg-green-100 text-green-800',
-      IGNORED: 'bg-gray-100 text-gray-800',
-      APPLIED: 'bg-blue-100 text-blue-800',
-      REJECTED: 'bg-red-100 text-red-800',
-      INTERVIEW: 'bg-purple-100 text-purple-800',
-      OFFER: 'bg-emerald-100 text-emerald-800',
-    };
-    return colors[status] || 'bg-gray-100 text-gray-800';
   };
 
   const getCompatibilityColor = (score: number) => {
@@ -53,21 +45,31 @@ export default function JobsTable({ jobs, totalCount }: JobsTableProps) {
         </TableCaption>
         <TableHeader>
           <TableRow>
+            <TableHead>Status</TableHead>
+            <TableHead className="text-center">Compatibilidade</TableHead>
             <TableHead className="w-[250px]">Vaga</TableHead>
             <TableHead>Empresa</TableHead>
-            <TableHead className="text-center">Compatibilidade</TableHead>
+            <TableHead className="text-center">Easy Apply</TableHead>
             <TableHead>Senioridade</TableHead>
             <TableHead>Experiência</TableHead>
-            <TableHead>Easy Apply</TableHead>
-            <TableHead>Status</TableHead>
             <TableHead>Recomendação IA</TableHead>
-            <TableHead className="text-right">Data</TableHead>
+            <TableHead className="text-right">Data da Análise</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
           {jobs.length > 0 ? (
             jobs.map((job) => (
               <TableRow key={job.id}>
+                <TableCell>
+                  <Badge variant={getStatusBadgeVariant(job.manualStatus)}>
+                    {job.manualStatus}
+                  </Badge>
+                </TableCell>
+                <TableCell className="text-center">
+                  <span className={getCompatibilityColor(job.overallCompatibility)}>
+                    {job.overallCompatibility}%
+                  </span>
+                </TableCell>
                 <TableCell className="font-medium">
                   <a
                     href={job.jobUrl}
@@ -80,9 +82,15 @@ export default function JobsTable({ jobs, totalCount }: JobsTableProps) {
                 </TableCell>
                 <TableCell>{job.companyName}</TableCell>
                 <TableCell className="text-center">
-                  <span className={getCompatibilityColor(job.overallCompatibility)}>
-                    {job.overallCompatibility}%
-                  </span>
+                  {job.hasEasyApply ? (
+                    <Badge variant="green">
+                      ✓ Sim
+                    </Badge>
+                  ) : (
+                    <Badge variant="gray">
+                      ✗ Não
+                    </Badge>
+                  )}
                 </TableCell>
                 <TableCell>
                   <span className="text-sm">
@@ -94,30 +102,14 @@ export default function JobsTable({ jobs, totalCount }: JobsTableProps) {
                     {job.experienceRequired || 'N/A'}
                   </span>
                 </TableCell>
-                <TableCell className="text-center">
-                  {job.hasEasyApply ? (
-                    <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                      ✓ Sim
-                    </span>
+                <TableCell>
+                  {job.iaRecommendation ? (
+                    <Badge variant={getRecommendationBadgeVariant(job.iaRecommendation)}>
+                      {getFilterLabel(IA_RECOMMENDATION_FILTERS, job.iaRecommendation)}
+                    </Badge>
                   ) : (
-                    <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
-                      ✗ Não
-                    </span>
+                    <Badge variant="gray">N/A</Badge>
                   )}
-                </TableCell>
-                <TableCell>
-                  <span
-                    className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${getStatusBadgeColor(
-                      job.manualStatus
-                    )}`}
-                  >
-                    {job.manualStatus}
-                  </span>
-                </TableCell>
-                <TableCell>
-                  <span className="text-sm line-clamp-2">
-                    {job.iaRecommendation || 'N/A'}
-                  </span>
                 </TableCell>
                 <TableCell className="text-right text-sm text-gray-500">
                   {formatDate(job.createdAt)}
