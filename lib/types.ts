@@ -46,3 +46,10 @@ export interface JobAnalysisSearchParams {
   page?: string;
   limit?: string;
 }
+
+export interface SortableHeaderProps {
+  field: string;
+  children: React.ReactNode;
+  className?: string;
+  onSort: (field: string) => void;
+}
