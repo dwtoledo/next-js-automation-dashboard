@@ -1,0 +1,65 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model JobAnalysis {
+  id                   String       @id @default(cuid())
+  jobId                String       @unique
+  jobUrl               String
+  jobTitle             String
+  companyName          String
+  jobDescription       String       @db.Text
+  isApplied            Boolean      @default(false)
+  hasEasyApply         Boolean      @default(false)
+  overallCompatibility Int
+  manualStatus         ManualStatus @default(PENDING)
+  manualDecisionAt     DateTime?
+  manualNotes          String?      @db.Text
+  recruiterUrl         String?
+  analysisData         Json
+  updatedAt            DateTime     @updatedAt
+  createdAt            DateTime     @default(now())
+
+  @@index([overallCompatibility])
+  @@index([companyName])
+  @@index([createdAt])
+  @@index([isApplied])
+  @@index([manualStatus])
+  @@index([manualDecisionAt])
+  @@index([analysisData], type: Gin)
+  @@map("job_analyses")
+}
+
+model IgnoredJob {
+  id           String   @id @default(cuid())
+  jobId        String   @unique
+  jobTitle     String
+  companyName  String
+  jobUrl       String
+  ignoreReason String
+  recruiterUrl String?
+  createdAt    DateTime @default(now())
+
+  @@index([jobId])
+  @@index([companyName])
+  @@index([ignoreReason])
+  @@index([createdAt])
+  @@map("ignored_jobs")
+}
+
+enum ManualStatus {
+  PENDING
+  IGNORED
+  INTERESTED
+  APPLIED
+  REJECTED
+  INTERVIEW
+  OFFER
+  ACCEPTED
+  DECLINED
+}
