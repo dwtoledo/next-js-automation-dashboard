@@ -165,3 +165,14 @@ export const TOAST_CLASS_NAMES = {
   success: "group-[.toaster]:!bg-green-50 group-[.toaster]:!text-green-900 group-[.toaster]:!border-green-200 dark:group-[.toaster]:!bg-green-950 dark:group-[.toaster]:!text-green-100 dark:group-[.toaster]:!border-green-800 [&_[data-description]]:!text-green-800 dark:[&_[data-description]]:!text-green-200",
   error: "group-[.toaster]:!bg-red-50 group-[.toaster]:!text-red-900 group-[.toaster]:!border-red-200 dark:group-[.toaster]:!bg-red-950 dark:group-[.toaster]:!text-red-100 dark:group-[.toaster]:!border-red-800 [&_[data-description]]:!text-red-800 dark:[&_[data-description]]:!text-red-200",
 } as const;
+
+export const HEADER_CONFIG: Record<string, { title: string; description: string }> = {
+  "/dashboard": {
+    title: "Dashboard de Vagas",
+    description: "Gerencie e analise as vagas pendentes de análise",
+  },
+  default: {
+    title: "LinkedIn Job Automation",
+    description: "Projeto para automação de análises de vagas no LinkedIn.",
+  },
+} as const;
