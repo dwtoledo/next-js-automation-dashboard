@@ -70,6 +70,23 @@ export function getFilterColor(
   return getFilterOption(filters, value)?.color || 'bg-gray-100 text-gray-800 border-gray-300';
 }
 
+export function formatDateTimeBR(date: Date): string {
+  return new Date(date).toLocaleString('pt-BR', {
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+  });
+}
+
+export function getCompatibilityColor(score: number): string {
+  if (score >= 80) return 'text-green-600 font-semibold';
+  if (score >= 60) return 'text-blue-600 font-semibold';
+  if (score >= 40) return 'text-yellow-600 font-semibold';
+  return 'text-red-600 font-semibold';
+}
+
 export function buildPrismaQuery(searchParams: JobAnalysisSearchParams) {
   const where: Prisma.JobAnalysisWhereInput = {};
   const orderBy: Prisma.JobAnalysisOrderByWithRelationInput = {};
