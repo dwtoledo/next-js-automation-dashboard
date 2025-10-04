@@ -53,3 +53,9 @@ export interface SortableHeaderProps {
   className?: string;
   onSort: (field: string) => void;
 }
+
+export interface PaginationControlsProps {
+  currentPage: number;
+  totalPages: number;
+  totalCount: number;
+}
