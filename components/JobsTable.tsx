@@ -3,7 +3,6 @@
 import {
   Table,
   TableBody,
-  TableCaption,
   TableCell,
   TableHead,
   TableHeader,
@@ -11,49 +10,53 @@ import {
 } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
 import { JobAnalysisRow } from '@/lib/types';
-import { getStatusBadgeVariant, getRecommendationBadgeVariant, getFilterLabel } from '@/lib/utils';
+import { 
+  getStatusBadgeVariant, 
+  getRecommendationBadgeVariant, 
+  getFilterLabel,
+  formatDateTimeBR,
+  getCompatibilityColor
+} from '@/lib/utils';
 import { IA_RECOMMENDATION_FILTERS, MANUAL_STATUS_FILTERS } from '@/lib/constants';
+import { useRouter, useSearchParams } from 'next/navigation';
+import SortableHeader from '@/components/SortableHeader';
 
-interface JobsTableProps {
-  jobs: JobAnalysisRow[];
-  totalCount: number;
-}
+export default function JobsTable({ jobs }: { jobs: JobAnalysisRow[] }) {
+  const router = useRouter();
+  const searchParams = useSearchParams();
 
-export default function JobsTable({ jobs, totalCount }: JobsTableProps) {
-  const formatDate = (date: Date) => {
-    return new Date(date).toLocaleString('pt-BR', {
-      day: '2-digit',
-      month: '2-digit',
-      year: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit',
-    });
-  };
+  const handleSort = (field: string) => {
+    const params = new URLSearchParams(searchParams.toString());
+    const currentSortBy = params.get('sortBy');
+    const currentSortOrder = params.get('sortOrder');
 
-  const getCompatibilityColor = (score: number) => {
-    if (score >= 80) return 'text-green-600 font-semibold';
-    if (score >= 60) return 'text-blue-600 font-semibold';
-    if (score >= 40) return 'text-yellow-600 font-semibold';
-    return 'text-red-600 font-semibold';
+    if (currentSortBy === field) {
+      const newOrder = currentSortOrder === 'asc' ? 'desc' : 'asc';
+      params.set('sortOrder', newOrder);
+    } else {
+      params.set('sortBy', field);
+      params.set('sortOrder', 'desc');
+    }
+
+    params.set('page', '1');
+
+    router.push(`?${params.toString()}`);
   };
 
   return (
     <div className="rounded-md border">
       <Table>
-        <TableCaption>
-          Mostrando {jobs.length} de {totalCount} vagas pendentes
-        </TableCaption>
         <TableHeader>
           <TableRow>
             <TableHead>Status</TableHead>
-            <TableHead className="text-center">Compatibilidade</TableHead>
+            <SortableHeader field="overallCompatibility" className="text-center" onSort={handleSort}>Compatibilidade</SortableHeader>
             <TableHead className="w-[250px]">Vaga</TableHead>
             <TableHead>Empresa</TableHead>
             <TableHead className="text-center">Easy Apply</TableHead>
             <TableHead>Senioridade</TableHead>
             <TableHead>Experiência</TableHead>
             <TableHead>Recomendação IA</TableHead>
-            <TableHead className="text-right">Data da Análise</TableHead>
+            <SortableHeader field="createdAt" className="text-right" onSort={handleSort}>Data da Análise</SortableHeader>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -112,7 +115,7 @@ export default function JobsTable({ jobs, totalCount }: JobsTableProps) {
                   )}
                 </TableCell>
                 <TableCell className="text-right text-sm text-gray-500">
-                  {formatDate(job.createdAt)}
+                  {formatDateTimeBR(job.createdAt)}
                 </TableCell>
               </TableRow>
             ))
