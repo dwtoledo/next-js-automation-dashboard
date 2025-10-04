@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import prisma from '@/lib/prisma';
 import { buildPrismaQuery, transformJobAnalysis } from '@/lib/utils';
 import JobsTable from '@/components/JobsTable';
@@ -7,8 +8,14 @@ import {
   MANUAL_STATUS_FILTERS,
   IA_RECOMMENDATION_FILTERS,
   SENIORITY_LEVEL_FILTERS,
+  HEADER_CONFIG,
 } from '@/lib/constants';
 import type { JobAnalysisSearchParams } from '@/lib/types';
+
+export const metadata: Metadata = {
+  title: HEADER_CONFIG["/dashboard"].title,
+  description: HEADER_CONFIG["/dashboard"].description,
+};
 
 interface DashboardPageProps {
   searchParams: Promise<JobAnalysisSearchParams>;
@@ -45,13 +52,6 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
 
   return (
     <div className="container mx-auto p-6">
-      <div className="mb-6">
-        <h1 className="text-3xl font-bold mb-2">Dashboard de Vagas</h1>
-        <p className="text-muted-foreground">
-          Gerencie e analise as vagas pendentes de análise
-        </p>
-      </div>
-
       <FiltersPanel filterConfigs={filterConfigs} />
 
       <JobsTable jobs={jobRows} />
