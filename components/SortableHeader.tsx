@@ -3,7 +3,14 @@
 import { TableHead } from '@/components/ui/table';
 import { useSearchParams } from 'next/navigation';
 import { ArrowUpDown, ArrowUp, ArrowDown } from 'lucide-react';
-import { SortableHeaderProps } from '@/lib/types';
+import type { ReactNode } from 'react';
+
+interface SortableHeaderProps {
+  field: string;
+  children: ReactNode;
+  className?: string;
+  onSort: (field: string) => void;
+}
 
 export default function SortableHeader({ field, children, className, onSort }: SortableHeaderProps) {
   const searchParams = useSearchParams();

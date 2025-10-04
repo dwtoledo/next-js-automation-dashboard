@@ -1,6 +1,7 @@
-import prisma from './prisma';
+import type { JobAnalysis as PrismaJobAnalysis, ManualStatus } from '@prisma/client';
+export type { JobAnalysis, ManualStatus } from '@prisma/client';
 
-export type JobAnalysis = Awaited<ReturnType<typeof prisma.jobAnalysis.findFirst>>;
+export type JobAnalysisNonNull = NonNullable<PrismaJobAnalysis>;
 
 export interface FilterOption {
   value: string;
@@ -18,7 +19,7 @@ export interface JobAnalysisRow {
   isApplied: boolean;
   hasEasyApply: boolean;
   overallCompatibility: number;
-  manualStatus: string;
+  manualStatus: ManualStatus;
   manualDecisionAt: Date | null;
   manualNotes: string | null;
   recruiterUrl: string | null;
@@ -28,7 +29,6 @@ export interface JobAnalysisRow {
   seniorityLevel?: string;
   iaRecommendation?: string;
 }
-
 
 export interface JobAnalysisSearchParams {
   search?: string;
@@ -45,22 +45,4 @@ export interface JobAnalysisSearchParams {
   sortOrder?: string;
   page?: string;
   limit?: string;
-}
-
-export interface SortableHeaderProps {
-  field: string;
-  children: React.ReactNode;
-  className?: string;
-  onSort: (field: string) => void;
-}
-
-export interface PaginationControlsProps {
-  currentPage: number;
-  totalPages: number;
-  totalCount: number;
-}
-
-export interface TableRowActionsProps {
-  jobId: string;
-  manualStatus: string;
 }

@@ -5,7 +5,12 @@ import { Button } from '@/components/ui/button';
 import { updateJobStatus } from '@/app/actions';
 import { FileText, X, Check } from 'lucide-react';
 import { toast } from 'sonner';
-import { TableRowActionsProps } from '@/lib/types';
+import type { ManualStatus } from '@/lib/types';
+
+interface TableRowActionsProps {
+    jobId: string;
+    manualStatus: ManualStatus;
+}
 
 export default function TableRowActions({
     jobId,

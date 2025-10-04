@@ -3,7 +3,12 @@
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight } from 'lucide-react';
-import { PaginationControlsProps } from '@/lib/types';
+
+interface PaginationControlsProps {
+  currentPage: number;
+  totalPages: number;
+  totalCount: number;
+}
 
 export default function PaginationControls({ currentPage, totalPages, totalCount }: PaginationControlsProps) {
   const router = useRouter();

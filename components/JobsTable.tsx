@@ -9,7 +9,7 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
-import { JobAnalysisRow } from '@/lib/types';
+import type { JobAnalysisRow } from '@/lib/types';
 import { 
   getStatusBadgeVariant, 
   getRecommendationBadgeVariant, 
@@ -22,7 +22,11 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import SortableHeader from '@/components/SortableHeader';
 import TableRowActions from '@/components/TableRowActions';
 
-export default function JobsTable({ jobs }: { jobs: JobAnalysisRow[] }) {
+interface JobsTableProps {
+  jobs: JobAnalysisRow[];
+}
+
+export default function JobsTable({ jobs }: JobsTableProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
 

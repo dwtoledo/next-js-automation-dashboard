@@ -8,14 +8,15 @@ import {
   IA_RECOMMENDATION_FILTERS,
   SENIORITY_LEVEL_FILTERS,
 } from '@/lib/constants';
-import { JobAnalysisSearchParams } from '@/lib/types';
+import type { JobAnalysisSearchParams } from '@/lib/types';
 
-export default async function DashboardPage({
-  searchParams,
-}: {
+interface DashboardPageProps {
   searchParams: Promise<JobAnalysisSearchParams>;
-}) {
+}
+
+export default async function DashboardPage({ searchParams }: DashboardPageProps) {
   const resolvedSearchParams = await searchParams;
+
   const queryOptions = buildPrismaQuery(resolvedSearchParams);
 
   const [jobs, totalCount] = await Promise.all([
