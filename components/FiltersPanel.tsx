@@ -1,7 +1,7 @@
 'use client';
 
 import { useRouter, usePathname, useSearchParams } from 'next/navigation';
-import { useCallback, useState, useEffect } from 'react';
+import { useCallback, useState } from 'react';
 import { useDebouncedCallback } from 'use-debounce';
 import { Search, Filter, X, Calendar, Sliders } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
