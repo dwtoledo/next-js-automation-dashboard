@@ -2,6 +2,7 @@ import prisma from '@/lib/prisma';
 import { buildPrismaQuery, transformJobAnalysis } from '@/lib/utils';
 import JobsTable from '@/components/JobsTable';
 import FiltersPanel from '@/components/FiltersPanel';
+import PaginationControls from '@/components/PaginationControls';
 import {
   MANUAL_STATUS_FILTERS,
   IA_RECOMMENDATION_FILTERS,
@@ -36,6 +37,10 @@ export default async function DashboardPage({
     seniorityLevelFilters: SENIORITY_LEVEL_FILTERS,
   };
 
+  const limit = parseInt(searchParams.limit || '20', 10);
+  const currentPage = parseInt(searchParams.page || '1', 10);
+  const totalPages = Math.ceil(totalCount / limit);
+
   return (
     <div className="container mx-auto p-6">
       <div className="mb-6">
@@ -47,7 +52,13 @@ export default async function DashboardPage({
 
       <FiltersPanel filterConfigs={filterConfigs} />
 
-      <JobsTable jobs={jobRows} totalCount={totalCount} />
+      <JobsTable jobs={jobRows} />
+
+      <PaginationControls
+        currentPage={currentPage}
+        totalPages={totalPages}
+        totalCount={totalCount}
+      />
     </div>
   );
 }
