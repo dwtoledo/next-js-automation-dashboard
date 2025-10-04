@@ -1,6 +1,12 @@
 import prisma from './prisma';
 
-type JobAnalysis = Awaited<ReturnType<typeof prisma.jobAnalysis.findFirst>>;
+export type JobAnalysis = Awaited<ReturnType<typeof prisma.jobAnalysis.findFirst>>;
+
+export interface FilterOption {
+  value: string;
+  label: string;
+  color: string;
+}
 
 export interface JobAnalysisRow {
   id: string;
