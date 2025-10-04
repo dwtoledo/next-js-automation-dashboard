@@ -1,7 +1,7 @@
 'use client';
 
 import { useRouter, usePathname, useSearchParams } from 'next/navigation';
-import { useCallback, useState } from 'react';
+import { useCallback, useState, useEffect } from 'react';
 import { useDebouncedCallback } from 'use-debounce';
 import { Search, Filter, X, Calendar, Sliders } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -38,7 +38,7 @@ export default function FiltersPanel({ filterConfigs }: FiltersPanelProps) {
     const [dateTo, setDateTo] = useState(searchParams.get('dateTo') || '');
 
     const [selectedStatuses, setSelectedStatuses] = useState<string[]>(
-        searchParams.get('manualStatus')?.split(',').filter(Boolean) || []
+        searchParams.get('manualStatus')?.split(',').filter(Boolean) || ['PENDING']
     );
     const [selectedRecommendations, setSelectedRecommendations] = useState<string[]>(
         searchParams.get('iaRecommendation')?.split(',').filter(Boolean) || []
@@ -48,6 +48,14 @@ export default function FiltersPanel({ filterConfigs }: FiltersPanelProps) {
     );
 
     const [isExpanded, setIsExpanded] = useState(false);
+
+    useEffect(() => {
+        if (!searchParams.get('manualStatus')) {
+            const params = new URLSearchParams(searchParams.toString());
+            params.set('manualStatus', 'PENDING');
+            router.replace(`${pathname}?${params.toString()}`, { scroll: false });
+        }
+    }, []);
 
     const updateURL = useCallback(
         (updates: Record<string, string | null>) => {
@@ -143,10 +151,12 @@ export default function FiltersPanel({ filterConfigs }: FiltersPanelProps) {
         setExperienceRange([0, 20]);
         setDateFrom('');
         setDateTo('');
-        setSelectedStatuses([]);
+        setSelectedStatuses(['PENDING']);
         setSelectedRecommendations([]);
         setSelectedSeniorities([]);
-        router.push(pathname, { scroll: false });
+        const params = new URLSearchParams();
+        params.set('manualStatus', 'PENDING');
+        router.push(`${pathname}?${params.toString()}`, { scroll: false });
     };
 
     const hasActiveFilters =
@@ -157,7 +167,7 @@ export default function FiltersPanel({ filterConfigs }: FiltersPanelProps) {
         experienceRange[1] !== 20 ||
         dateFrom ||
         dateTo ||
-        selectedStatuses.length > 0 ||
+        !(selectedStatuses.length === 1 && selectedStatuses[0] === 'PENDING') ||
         selectedRecommendations.length > 0 ||
         selectedSeniorities.length > 0;
 
