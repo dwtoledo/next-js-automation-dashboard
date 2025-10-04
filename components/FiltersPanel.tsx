@@ -200,11 +200,11 @@ export default function FiltersPanel({ filterConfigs }: FiltersPanelProps) {
         selectedSeniorities.length > 0;
 
     return (
-        <Card className="mb-6">
+        <Card className="mb-6 p-4">
             <CardHeader>
                 <div className="flex items-center justify-between">
                     <CardTitle className="flex items-center gap-2">
-                        <Filter className="h-5 w-5" />
+                        <Filter className="h-4 w-4" />
                         Filtros
                     </CardTitle>
                     <div className="flex items-center gap-2">
