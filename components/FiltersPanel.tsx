@@ -10,6 +10,7 @@ import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Slider } from '@/components/ui/slider';
+import { Checkbox } from '@/components/ui/checkbox';
 import type { FilterOption } from '@/lib/types';
 
 interface FiltersPanelProps {
@@ -36,6 +37,17 @@ export default function FiltersPanel({ filterConfigs }: FiltersPanelProps) {
     ]);
     const [dateFrom, setDateFrom] = useState(searchParams.get('dateFrom') || '');
     const [dateTo, setDateTo] = useState(searchParams.get('dateTo') || '');
+
+    const [isApplied, setIsApplied] = useState<boolean | undefined>(
+        searchParams.get('isApplied') === 'true' ? true : 
+        searchParams.get('isApplied') === 'false' ? false : 
+        undefined
+    );
+    const [hasEasyApply, setHasEasyApply] = useState<boolean | undefined>(
+        searchParams.get('hasEasyApply') === 'true' ? true : 
+        searchParams.get('hasEasyApply') === 'false' ? false : 
+        undefined
+    );
 
     const [selectedStatuses, setSelectedStatuses] = useState<string[]>(
         searchParams.get('manualStatus')?.split(',').filter(Boolean) || ['PENDING']
@@ -119,6 +131,18 @@ export default function FiltersPanel({ filterConfigs }: FiltersPanelProps) {
         updateURL({ dateFrom: dateFrom || null, dateTo: value || null });
     };
 
+    const handleIsAppliedChange = (checked: boolean | 'indeterminate') => {
+        const newValue = checked === 'indeterminate' ? undefined : checked;
+        setIsApplied(newValue);
+        updateURL({ isApplied: newValue === undefined ? null : newValue.toString() });
+    };
+
+    const handleHasEasyApplyChange = (checked: boolean | 'indeterminate') => {
+        const newValue = checked === 'indeterminate' ? undefined : checked;
+        setHasEasyApply(newValue);
+        updateURL({ hasEasyApply: newValue === undefined ? null : newValue.toString() });
+    };
+
     const toggleStatus = (status: string) => {
         const newStatuses = selectedStatuses.includes(status)
             ? selectedStatuses.filter((s) => s !== status)
@@ -151,6 +175,8 @@ export default function FiltersPanel({ filterConfigs }: FiltersPanelProps) {
         setExperienceRange([0, 20]);
         setDateFrom('');
         setDateTo('');
+        setIsApplied(undefined);
+        setHasEasyApply(undefined);
         setSelectedStatuses(['PENDING']);
         setSelectedRecommendations([]);
         setSelectedSeniorities([]);
@@ -167,6 +193,8 @@ export default function FiltersPanel({ filterConfigs }: FiltersPanelProps) {
         experienceRange[1] !== 20 ||
         dateFrom ||
         dateTo ||
+        isApplied !== undefined ||
+        hasEasyApply !== undefined ||
         !(selectedStatuses.length === 1 && selectedStatuses[0] === 'PENDING') ||
         selectedRecommendations.length > 0 ||
         selectedSeniorities.length > 0;
@@ -217,6 +245,48 @@ export default function FiltersPanel({ filterConfigs }: FiltersPanelProps) {
                             onChange={(e) => handleSearchChange(e.target.value)}
                             className="w-full"
                         />
+                    </div>
+                    <div className="space-y-3">
+                        <div className="flex flex-col gap-3">
+                            <div className="flex items-center space-x-2">
+                                <Checkbox
+                                    id="isApplied"
+                                    checked={isApplied === true}
+                                    onCheckedChange={(checked) => {
+                                        if (checked === true) {
+                                            handleIsAppliedChange(true);
+                                        } else if (isApplied === true) {
+                                            handleIsAppliedChange('indeterminate');
+                                        }
+                                    }}
+                                />
+                                <label
+                                    htmlFor="isApplied"
+                                    className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer"
+                                >
+                                    Apenas vagas já aplicadas
+                                </label>
+                            </div>
+                            <div className="flex items-center space-x-2">
+                                <Checkbox
+                                    id="hasEasyApply"
+                                    checked={hasEasyApply === true}
+                                    onCheckedChange={(checked) => {
+                                        if (checked === true) {
+                                            handleHasEasyApplyChange(true);
+                                        } else if (hasEasyApply === true) {
+                                            handleHasEasyApplyChange('indeterminate');
+                                        }
+                                    }}
+                                />
+                                <label
+                                    htmlFor="hasEasyApply"
+                                    className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer"
+                                >
+                                    Apenas vagas com Easy Apply
+                                </label>
+                            </div>
+                        </div>
                     </div>
                     <div className="space-y-2">
                         <Label>Status Manual</Label>

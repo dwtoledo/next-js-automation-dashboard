@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import prisma from '@/lib/prisma';
-import { buildPrismaQuery, transformJobAnalysis } from '@/lib/utils';
+import { buildPrismaQuery, transformJobAnalysis, parseSearchParams } from '@/lib/utils';
 import JobsTable from '@/components/JobsTable';
 import FiltersPanel from '@/components/FiltersPanel';
 import PaginationControls from '@/components/PaginationControls';
@@ -10,7 +10,6 @@ import {
   SENIORITY_LEVEL_FILTERS,
   HEADER_CONFIG,
 } from '@/lib/constants';
-import type { JobAnalysisSearchParams } from '@/lib/types';
 
 export const metadata: Metadata = {
   title: HEADER_CONFIG["/dashboard"].title,
@@ -18,11 +17,12 @@ export const metadata: Metadata = {
 };
 
 interface DashboardPageProps {
-  searchParams: Promise<JobAnalysisSearchParams>;
+  searchParams: Promise<Record<string, string | undefined>>;
 }
 
 export default async function DashboardPage({ searchParams }: DashboardPageProps) {
-  const resolvedSearchParams = await searchParams;
+  const rawSearchParams = await searchParams;
+  const resolvedSearchParams = parseSearchParams(rawSearchParams);
 
   const queryOptions = buildPrismaQuery(resolvedSearchParams);
 

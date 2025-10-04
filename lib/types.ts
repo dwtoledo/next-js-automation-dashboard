@@ -32,6 +32,8 @@ export interface JobAnalysisRow {
 
 export interface JobAnalysisSearchParams {
   search?: string;
+  isApplied?: boolean;
+  hasEasyApply?: boolean;
   manualStatus?: string;
   seniority?: string;
   iaRecommendation?: string;

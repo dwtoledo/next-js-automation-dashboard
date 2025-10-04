@@ -143,6 +143,12 @@ function parseDateParam(value: string | undefined): Date | undefined {
   return !isNaN(date.getTime()) ? date : undefined;
 }
 
+function parseBooleanParam(value: string | undefined): boolean | undefined {
+  if (value === 'true') return true;
+  if (value === 'false') return false;
+  return undefined;
+}
+
 function splitAndFilterParams(value: string | undefined): string[] {
   if (!value) return [];
   return value.split(',').map(s => s.trim()).filter(Boolean);
@@ -325,6 +331,23 @@ function buildDateRangeFilter(
   return where;
 }
 
+function buildBooleanFilter(
+  isApplied: boolean | undefined,
+  hasEasyApply: boolean | undefined
+): Prisma.JobAnalysisWhereInput {
+  const where: Prisma.JobAnalysisWhereInput = {};
+
+  if (isApplied !== undefined) {
+    where.isApplied = isApplied;
+  }
+
+  if (hasEasyApply !== undefined) {
+    where.hasEasyApply = hasEasyApply;
+  }
+
+  return where;
+}
+
 function mergeWhereConditions(conditions: Prisma.JobAnalysisWhereInput[]): Prisma.JobAnalysisWhereInput {
   const mergedWhere: Prisma.JobAnalysisWhereInput = {};
   const andConditions: Prisma.JobAnalysisWhereInput[] = [];
@@ -411,6 +434,7 @@ export function buildPrismaQuery(searchParams: JobAnalysisSearchParams) {
     buildCompatibilityFilter(searchParams.minCompatibility, searchParams.maxCompatibility),
     buildExperienceFilter(searchParams.minExperience, searchParams.maxExperience),
     buildDateRangeFilter(searchParams.dateFrom, searchParams.dateTo),
+    buildBooleanFilter(searchParams.isApplied, searchParams.hasEasyApply),
   ];
 
   const where = mergeWhereConditions(filterConditions);
@@ -423,5 +447,26 @@ export function buildPrismaQuery(searchParams: JobAnalysisSearchParams) {
     where,
     orderBy,
     ...pagination,
+  };
+}
+
+export function parseSearchParams(rawParams: Record<string, string | undefined>): JobAnalysisSearchParams {
+  return {
+    search: rawParams.search,
+    isApplied: parseBooleanParam(rawParams.isApplied),
+    hasEasyApply: parseBooleanParam(rawParams.hasEasyApply),
+    manualStatus: rawParams.manualStatus,
+    seniority: rawParams.seniority,
+    iaRecommendation: rawParams.iaRecommendation,
+    minCompatibility: rawParams.minCompatibility,
+    maxCompatibility: rawParams.maxCompatibility,
+    minExperience: rawParams.minExperience,
+    maxExperience: rawParams.maxExperience,
+    dateFrom: rawParams.dateFrom,
+    dateTo: rawParams.dateTo,
+    sortBy: rawParams.sortBy,
+    sortOrder: rawParams.sortOrder,
+    page: rawParams.page,
+    limit: rawParams.limit,
   };
 }
