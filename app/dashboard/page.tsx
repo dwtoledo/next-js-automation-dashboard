@@ -13,9 +13,10 @@ import { JobAnalysisSearchParams } from '@/lib/types';
 export default async function DashboardPage({
   searchParams,
 }: {
-  searchParams: JobAnalysisSearchParams;
+  searchParams: Promise<JobAnalysisSearchParams>;
 }) {
-  const queryOptions = buildPrismaQuery(searchParams);
+  const resolvedSearchParams = await searchParams;
+  const queryOptions = buildPrismaQuery(resolvedSearchParams);
 
   const [jobs, totalCount] = await Promise.all([
     prisma.jobAnalysis.findMany({
@@ -37,8 +38,8 @@ export default async function DashboardPage({
     seniorityLevelFilters: SENIORITY_LEVEL_FILTERS,
   };
 
-  const limit = parseInt(searchParams.limit || '20', 10);
-  const currentPage = parseInt(searchParams.page || '1', 10);
+  const limit = parseInt(resolvedSearchParams.limit || '20', 10);
+  const currentPage = parseInt(resolvedSearchParams.page || '1', 10);
   const totalPages = Math.ceil(totalCount / limit);
 
   return (
