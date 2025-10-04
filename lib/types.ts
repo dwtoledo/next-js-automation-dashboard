@@ -59,3 +59,8 @@ export interface PaginationControlsProps {
   totalPages: number;
   totalCount: number;
 }
+
+export interface TableRowActionsProps {
+  jobId: string;
+  manualStatus: string;
+}
