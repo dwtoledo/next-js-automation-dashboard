@@ -47,7 +47,7 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
     <div className="container mx-auto p-6">
       <div className="mb-6">
         <h1 className="text-3xl font-bold mb-2">Dashboard de Vagas</h1>
-        <p className="text-gray-600">
+        <p className="text-muted-foreground">
           Gerencie e analise as vagas pendentes de análise
         </p>
       </div>
