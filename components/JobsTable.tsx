@@ -20,6 +20,7 @@ import {
 import { IA_RECOMMENDATION_FILTERS, MANUAL_STATUS_FILTERS } from '@/lib/constants';
 import { useRouter, useSearchParams } from 'next/navigation';
 import SortableHeader from '@/components/SortableHeader';
+import TableRowActions from '@/components/TableRowActions';
 
 export default function JobsTable({ jobs }: { jobs: JobAnalysisRow[] }) {
   const router = useRouter();
@@ -49,14 +50,15 @@ export default function JobsTable({ jobs }: { jobs: JobAnalysisRow[] }) {
         <TableHeader>
           <TableRow>
             <TableHead>Status</TableHead>
-            <SortableHeader field="overallCompatibility" className="text-center" onSort={handleSort}>Compatibilidade</SortableHeader>
-            <TableHead className="w-[250px]">Vaga</TableHead>
+            <SortableHeader field="overallCompatibility" onSort={handleSort}>Compatibilidade</SortableHeader>
+            <TableHead>Vaga</TableHead>
             <TableHead>Empresa</TableHead>
-            <TableHead className="text-center">Easy Apply</TableHead>
+            <TableHead>Easy Apply</TableHead>
             <TableHead>Senioridade</TableHead>
             <TableHead>Experiência</TableHead>
             <TableHead>Recomendação IA</TableHead>
-            <SortableHeader field="createdAt" className="text-right" onSort={handleSort}>Data da Análise</SortableHeader>
+            <SortableHeader field="createdAt" onSort={handleSort}>Data da Análise</SortableHeader>
+            <TableHead>Ações</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -74,14 +76,30 @@ export default function JobsTable({ jobs }: { jobs: JobAnalysisRow[] }) {
                   </span>
                 </TableCell>
                 <TableCell className="font-medium">
-                  <a
-                    href={job.jobUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-blue-600 hover:underline"
-                  >
-                    {job.jobTitle}
-                  </a>
+                  <div className="flex items-center gap-2">
+                    <a
+                      href={job.jobUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-blue-600 hover:underline"
+                    >
+                      {job.jobTitle}
+                    </a>
+                    {job.recruiterUrl && (
+                      <a
+                        href={job.recruiterUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        <Badge 
+                          variant="outline" 
+                          className="cursor-pointer hover:bg-orange-50 border-orange-600 text-orange-600 text-xs"
+                        >
+                          Ver Recrutador
+                        </Badge>
+                      </a>
+                    )}
+                  </div>
                 </TableCell>
                 <TableCell>{job.companyName}</TableCell>
                 <TableCell className="text-center">
@@ -117,11 +135,17 @@ export default function JobsTable({ jobs }: { jobs: JobAnalysisRow[] }) {
                 <TableCell className="text-right text-sm text-gray-500">
                   {formatDateTimeBR(job.createdAt)}
                 </TableCell>
+                <TableCell className="text-right">
+                  <TableRowActions
+                    jobId={job.id}
+                    manualStatus={job.manualStatus}
+                  />
+                </TableCell>
               </TableRow>
             ))
           ) : (
             <TableRow>
-              <TableCell colSpan={9} className="text-center py-8 text-gray-500">
+              <TableCell colSpan={10} className="text-center py-8 text-gray-500">
                 Nenhuma vaga pendente encontrada.
               </TableCell>
             </TableRow>
