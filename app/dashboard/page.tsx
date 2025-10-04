@@ -1,33 +1,35 @@
 import prisma from '@/lib/prisma';
-import { transformJobAnalysis } from '@/lib/utils';
+import { buildPrismaQuery, transformJobAnalysis } from '@/lib/utils';
 import JobsTable from '@/components/JobsTable';
+import FiltersPanel from '@/components/FiltersPanel';
 import {
   MANUAL_STATUS_FILTERS,
   IA_RECOMMENDATION_FILTERS,
   SENIORITY_LEVEL_FILTERS,
 } from '@/lib/constants';
+import { JobAnalysisSearchParams } from '@/lib/types';
 
-export default async function DashboardPage() {
+export default async function DashboardPage({
+  searchParams,
+}: {
+  searchParams: JobAnalysisSearchParams;
+}) {
+  const queryOptions = buildPrismaQuery(searchParams);
+
   const [jobs, totalCount] = await Promise.all([
     prisma.jobAnalysis.findMany({
-      where: {
-        manualStatus: 'PENDING',
-      },
-      take: 20,
-      orderBy: {
-        createdAt: 'desc',
-      },
+      where: queryOptions.where,
+      orderBy: queryOptions.orderBy,
+      skip: queryOptions.skip,
+      take: queryOptions.take,
     }),
     prisma.jobAnalysis.count({
-      where: {
-        manualStatus: 'PENDING',
-      },
+      where: queryOptions.where,
     }),
   ]);
 
   const jobRows = jobs.map(transformJobAnalysis);
 
-  // Filter configurations to be passed to FiltersPanel component
   const filterConfigs = {
     manualStatusFilters: MANUAL_STATUS_FILTERS,
     iaRecommendationFilters: IA_RECOMMENDATION_FILTERS,
@@ -43,7 +45,7 @@ export default async function DashboardPage() {
         </p>
       </div>
 
-      {/* TODO: Add FiltersPanel component here with filterConfigs props */}
+      <FiltersPanel filterConfigs={filterConfigs} />
 
       <JobsTable jobs={jobRows} totalCount={totalCount} />
     </div>
