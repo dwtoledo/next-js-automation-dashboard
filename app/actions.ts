@@ -6,7 +6,7 @@ import { ManualStatus } from '@prisma/client';
 
 export async function updateJobStatus(id: string, newStatus: ManualStatus) {
   try {    
-    const result = await prisma.jobAnalysis.update({
+    await prisma.jobAnalysis.update({
       where: {
         id,
       },
