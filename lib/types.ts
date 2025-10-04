@@ -28,3 +28,21 @@ export interface JobAnalysisRow {
   seniorityLevel?: string;
   iaRecommendation?: string;
 }
+
+
+export interface JobAnalysisSearchParams {
+  search?: string;
+  manualStatus?: string;
+  seniority?: string;
+  iaRecommendation?: string;
+  minCompatibility?: string;
+  maxCompatibility?: string;
+  minExperience?: string;
+  maxExperience?: string;
+  dateFrom?: string;
+  dateTo?: string;
+  sortBy?: string;
+  sortOrder?: string;
+  page?: string;
+  limit?: string;
+}
