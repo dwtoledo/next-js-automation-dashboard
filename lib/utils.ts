@@ -372,7 +372,7 @@ function mergeWhereConditions(conditions: Prisma.JobAnalysisWhereInput[]): Prism
       } else if (key in mergedWhere) {
         andConditions.push({ [key]: value } as Prisma.JobAnalysisWhereInput);
       } else {
-        (mergedWhere as any)[key] = value;
+        mergedWhere[key as keyof Prisma.JobAnalysisWhereInput] = value as never;
       }
     }
   }
