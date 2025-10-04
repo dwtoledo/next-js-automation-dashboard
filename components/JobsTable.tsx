@@ -12,7 +12,7 @@ import {
 import { Badge } from '@/components/ui/badge';
 import { JobAnalysisRow } from '@/lib/types';
 import { getStatusBadgeVariant, getRecommendationBadgeVariant, getFilterLabel } from '@/lib/utils';
-import { IA_RECOMMENDATION_FILTERS } from '@/lib/constants';
+import { IA_RECOMMENDATION_FILTERS, MANUAL_STATUS_FILTERS } from '@/lib/constants';
 
 interface JobsTableProps {
   jobs: JobAnalysisRow[];
@@ -62,7 +62,7 @@ export default function JobsTable({ jobs, totalCount }: JobsTableProps) {
               <TableRow key={job.id}>
                 <TableCell>
                   <Badge variant={getStatusBadgeVariant(job.manualStatus)}>
-                    {job.manualStatus}
+                    {getFilterLabel(MANUAL_STATUS_FILTERS, job.manualStatus)}
                   </Badge>
                 </TableCell>
                 <TableCell className="text-center">
