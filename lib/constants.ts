@@ -31,6 +31,10 @@ export const BADGE_COLORS = {
   'outline-indigo': 'border-indigo-500 text-indigo-700 [a&]:hover:bg-indigo-50',
   'outline-emerald': 'border-emerald-500 text-emerald-700 [a&]:hover:bg-emerald-50',
   'outline-orange': 'border-orange-500 text-orange-700 [a&]:hover:bg-orange-50',
+  'outline-cyan': 'border-cyan-500 text-cyan-700 [a&]:hover:bg-cyan-50',
+  'outline-sky': 'border-sky-500 text-sky-700 [a&]:hover:bg-sky-50',
+  'outline-violet': 'border-violet-500 text-violet-700 [a&]:hover:bg-violet-50',
+  'outline-fuchsia': 'border-fuchsia-500 text-fuchsia-700 [a&]:hover:bg-fuchsia-50',
 } as const;
 
 export type BadgeVariant = keyof typeof BADGE_COLORS | 'default' | 'secondary' | 'destructive' | 'outline';
@@ -50,7 +54,7 @@ export const STATUS_VARIANT_MAP: Record<string, BadgeVariant> = {
 export const RECOMMENDATION_VARIANT_MAP: Record<string, BadgeVariant> = {
   advance: 'green',
   reject: 'red',
-  evaluate_with_reservations: 'amber',
+  evaluate_with_reservations: 'cyan',
 } as const;
 
 export const SENIORITY_VARIANT_MAP: Record<string, BadgeVariant> = {
@@ -140,7 +144,7 @@ export const IA_RECOMMENDATION_FILTERS: FilterOption[] = [
   {
     value: 'evaluate_with_reservations',
     label: 'Avaliar com reservas',
-    color: BADGE_COLORS.amber,
+    color: BADGE_COLORS.cyan,
   },
 ];
 
@@ -271,6 +275,10 @@ export const TEXT_COLOR_CLASSES: Record<BadgeVariant, string> = {
   'outline-indigo': 'text-indigo-700 dark:text-indigo-300',
   'outline-emerald': 'text-emerald-700 dark:text-emerald-300',
   'outline-orange': 'text-orange-700 dark:text-orange-300',
+  'outline-cyan': 'text-cyan-700 dark:text-cyan-300',
+  'outline-sky': 'text-sky-700 dark:text-sky-300',
+  'outline-violet': 'text-violet-700 dark:text-violet-300',
+  'outline-fuchsia': 'text-fuchsia-700 dark:text-fuchsia-300',
 } as const;
 
 export const PROGRESS_BAR_CLASSES: Record<string, string> = {

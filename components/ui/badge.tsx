@@ -38,6 +38,10 @@ const badgeVariants = cva(
         'outline-indigo': BADGE_COLORS['outline-indigo'],
         'outline-emerald': BADGE_COLORS['outline-emerald'],
         'outline-orange': BADGE_COLORS['outline-orange'],
+        'outline-cyan': BADGE_COLORS['outline-cyan'],
+        'outline-sky': BADGE_COLORS['outline-sky'],
+        'outline-violet': BADGE_COLORS['outline-violet'],
+        'outline-fuchsia': BADGE_COLORS['outline-fuchsia'],
       },
     },
     defaultVariants: {

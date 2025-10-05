@@ -69,12 +69,17 @@ export function getRecommendationOutlineVariant(recommendation: string): BadgeVa
   const baseVariant = RECOMMENDATION_VARIANT_MAP[recommendation];
   if (baseVariant === 'green') return 'outline-green';
   if (baseVariant === 'red') return 'outline-red';
-  if (baseVariant === 'amber') return 'outline-amber';
+  if (baseVariant === 'cyan') return 'outline-cyan';
   return 'outline-gray';
 }
 
 export function getSeniorityBadgeVariant(seniority: string): BadgeVariant {
   return SENIORITY_VARIANT_MAP[seniority] || 'gray';
+}
+
+export function getSeniorityOutlineVariant(seniority: string): BadgeVariant {
+  const baseVariant = SENIORITY_VARIANT_MAP[seniority] || 'gray';
+  return `outline-${baseVariant}` as BadgeVariant;
 }
 
 export function transformJobAnalysis(job: JobAnalysisNonNull): JobAnalysisRow {
