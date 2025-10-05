@@ -12,6 +12,7 @@ const SummarySchema = z.object({
   keyPoints: z.array(z.string()).optional(),
   strengths: z.array(z.string()).optional(),
   concerns: z.array(z.string()).optional(),
+  reasoning: z.string().optional(),
 });
 
 export const AnalysisDataSchema = z.object({
