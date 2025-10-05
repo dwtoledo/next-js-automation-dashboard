@@ -102,13 +102,13 @@ export default function JobsTable({ jobs }: JobsTableProps) {
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>Status</TableHead>
+              <TableHead className="text-center">Status</TableHead>
               <SortableHeader field="overallCompatibility" onSort={handleSort}>Compatibilidade</SortableHeader>
               <TableHead>Vaga</TableHead>
-              <TableHead>Easy Apply</TableHead>
-              <TableHead>Senioridade</TableHead>
-              <TableHead>Experiência</TableHead>
-              <TableHead>Recomendação IA</TableHead>
+              <TableHead className="text-center">Recomendação IA</TableHead>
+              <TableHead className="text-center">Experiência</TableHead>
+              <TableHead className="text-center">Senioridade</TableHead>
+              <TableHead className="text-center">Easy Apply</TableHead>
               <SortableHeader field="createdAt" onSort={handleSort}>Data da Análise</SortableHeader>
             </TableRow>
           </TableHeader>
@@ -116,7 +116,7 @@ export default function JobsTable({ jobs }: JobsTableProps) {
             {jobs.length > 0 ? (
               jobs.map((job) => (
                 <TableRow key={job.id}>
-                  <TableCell>
+                  <TableCell className="text-center">
                     <Badge variant={getStatusBadgeVariant(job.manualStatus)}>
                       {getFilterLabel(MANUAL_STATUS_FILTERS, job.manualStatus)}
                     </Badge>
@@ -199,6 +199,25 @@ export default function JobsTable({ jobs }: JobsTableProps) {
                     </div>
                   </TableCell>
                   <TableCell className="text-center">
+                    {job.iaRecommendation ? (
+                      <Badge variant={getRecommendationBadgeVariant(job.iaRecommendation)}>
+                        {getFilterLabel(IA_RECOMMENDATION_FILTERS, job.iaRecommendation)}
+                      </Badge>
+                    ) : (
+                      <Badge variant="gray">N/A</Badge>
+                    )}
+                  </TableCell>
+                  <TableCell className="text-center">
+                    <span className="text-sm">
+                      {job.experienceRequired || 'N/A'}
+                    </span>
+                  </TableCell>
+                  <TableCell className="text-center">
+                    <span className="text-sm">
+                      {job.seniorityLevel ? getFilterLabel(SENIORITY_LEVEL_FILTERS, job.seniorityLevel) : 'N/A'}
+                    </span>
+                  </TableCell>
+                  <TableCell className="text-center">
                     {job.hasEasyApply ? (
                       <Badge variant="green">
                         ✓ Sim
@@ -209,26 +228,7 @@ export default function JobsTable({ jobs }: JobsTableProps) {
                       </Badge>
                     )}
                   </TableCell>
-                  <TableCell>
-                    <span className="text-sm">
-                      {job.seniorityLevel ? getFilterLabel(SENIORITY_LEVEL_FILTERS, job.seniorityLevel) : 'N/A'}
-                    </span>
-                  </TableCell>
-                  <TableCell>
-                    <span className="text-sm">
-                      {job.experienceRequired || 'N/A'}
-                    </span>
-                  </TableCell>
-                  <TableCell>
-                    {job.iaRecommendation ? (
-                      <Badge variant={getRecommendationBadgeVariant(job.iaRecommendation)}>
-                        {getFilterLabel(IA_RECOMMENDATION_FILTERS, job.iaRecommendation)}
-                      </Badge>
-                    ) : (
-                      <Badge variant="gray">N/A</Badge>
-                    )}
-                  </TableCell>
-                  <TableCell className="text-right text-sm text-gray-500">
+                  <TableCell className="text-center text-sm text-gray-500">
                     {formatDateTimeBR(job.createdAt)}
                   </TableCell>
                 </TableRow>
