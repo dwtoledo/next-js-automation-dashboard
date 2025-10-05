@@ -62,3 +62,5 @@ export interface AnalysisSummary {
   concerns?: string[];
   reasoning?: string;
 }
+
+export type { AnalysisData } from './schemas';
