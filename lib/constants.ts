@@ -275,6 +275,29 @@ export function getCompatibilityVariant(score: number): BadgeVariant {
   return range?.variant || 'green';
 }
 
+export const DONUT_CHART_COLORS = {
+  red: {
+    stroke: '#ef4444',
+    text: 'text-red-600',
+    bg: 'bg-red-50'
+  },
+  orange: {
+    stroke: '#f97316',
+    text: 'text-orange-600',
+    bg: 'bg-orange-50'
+  },
+  yellow: {
+    stroke: '#eab308',
+    text: 'text-yellow-600',
+    bg: 'bg-yellow-50'
+  },
+  green: {
+    stroke: '#22c55e',
+    text: 'text-green-600',
+    bg: 'bg-green-50'
+  },
+} as const;
+
 export const HEADER_CONFIG: Record<string, { title: string; description: string }> = {
   "/dashboard": {
     title: "Dashboard de Vagas",
