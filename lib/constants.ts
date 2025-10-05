@@ -53,6 +53,21 @@ export const SENIORITY_VARIANT_MAP: Record<string, BadgeVariant> = {
   Unknown: 'gray',
 } as const;
 
+export const INFERENCE_SOURCE_VARIANT_MAP: Record<string, BadgeVariant> = {
+  Explicit: 'green',
+  Title: 'blue',
+  Responsibilities: 'purple',
+  Context: 'amber',
+  Unknown: 'gray',
+} as const;
+
+export const CONFIDENCE_LEVEL_VARIANT_MAP: Record<string, BadgeVariant> = {
+  High: 'green',
+  Medium: 'amber',
+  Low: 'orange',
+  None: 'gray',
+} as const;
+
 export const MANUAL_STATUS_FILTERS: FilterOption[] = [
   {
     value: 'PENDING',
@@ -122,27 +137,27 @@ export const IA_RECOMMENDATION_FILTERS: FilterOption[] = [
 export const SENIORITY_LEVEL_FILTERS: FilterOption[] = [
   {
     value: 'Entry',
-    label: 'Entry',
+    label: 'Iniciante',
     color: BADGE_COLORS.cyan,
   },
   {
     value: 'Junior',
-    label: 'Junior',
+    label: 'Júnior',
     color: BADGE_COLORS.sky,
   },
   {
     value: 'Mid',
-    label: 'Mid',
+    label: 'Pleno',
     color: BADGE_COLORS.blue,
   },
   {
     value: 'Senior',
-    label: 'Senior',
+    label: 'Sênior',
     color: BADGE_COLORS.violet,
   },
   {
     value: 'Lead',
-    label: 'Lead',
+    label: 'Líder',
     color: BADGE_COLORS.purple,
   },
   {
@@ -153,6 +168,57 @@ export const SENIORITY_LEVEL_FILTERS: FilterOption[] = [
   {
     value: 'Unknown',
     label: 'Desconhecido',
+    color: BADGE_COLORS.gray,
+  },
+];
+
+export const INFERENCE_SOURCE_FILTERS: FilterOption[] = [
+  {
+    value: 'Explicit',
+    label: 'Explícito',
+    color: BADGE_COLORS.green,
+  },
+  {
+    value: 'Title',
+    label: 'Título',
+    color: BADGE_COLORS.blue,
+  },
+  {
+    value: 'Responsibilities',
+    label: 'Responsabilidades',
+    color: BADGE_COLORS.purple,
+  },
+  {
+    value: 'Context',
+    label: 'Contexto',
+    color: BADGE_COLORS.amber,
+  },
+  {
+    value: 'Unknown',
+    label: 'Desconhecido',
+    color: BADGE_COLORS.gray,
+  },
+];
+
+export const CONFIDENCE_LEVEL_FILTERS: FilterOption[] = [
+  {
+    value: 'High',
+    label: 'Alta',
+    color: BADGE_COLORS.green,
+  },
+  {
+    value: 'Medium',
+    label: 'Média',
+    color: BADGE_COLORS.amber,
+  },
+  {
+    value: 'Low',
+    label: 'Baixa',
+    color: BADGE_COLORS.orange,
+  },
+  {
+    value: 'None',
+    label: 'Nenhuma',
     color: BADGE_COLORS.gray,
   },
 ];
