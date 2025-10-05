@@ -4,6 +4,8 @@ import { AnalysisDataSchema } from '@/lib/schemas';
 import { Button } from '@/components/ui/button';
 import type { Metadata } from 'next';
 import { BackButton } from '@/components/BackButton';
+import { JobDetailHeader } from '@/components/JobDetailHeader';
+import { QuickVerdict } from '@/components/QuickVerdict';
 
 interface JobDetailsPageProps {
   params: Promise<{
@@ -64,48 +66,53 @@ export default async function JobDetailsPage({ params }: JobDetailsPageProps) {
             ← Voltar ao Dashboard
           </BackButton>
         </div>
-        <header className="space-y-4">
-          <h1 className="text-4xl font-bold tracking-tight">
-            {jobAnalysis.jobTitle}
-          </h1>
-          <div className="flex items-center gap-4 text-lg text-muted-foreground">
-            <span className="font-semibold">{jobAnalysis.companyName}</span>
-            {analysisData?.location && (
-              <>
-                <span>•</span>
-                <span>{analysisData.location}</span>
-              </>
-            )}
-            {analysisData?.workType && (
-              <>
-                <span>•</span>
-                <span>{analysisData.workType}</span>
-              </>
-            )}
-          </div>
-          <div className="flex gap-3">
-            <Button asChild>
+        
+        <JobDetailHeader
+          jobTitle={jobAnalysis.jobTitle}
+          companyName={jobAnalysis.companyName}
+          manualStatus={jobAnalysis.manualStatus}
+          hasEasyApply={jobAnalysis.hasEasyApply}
+          createdAt={jobAnalysis.createdAt}
+          updatedAt={jobAnalysis.updatedAt}
+        />
+
+        <QuickVerdict
+          overallCompatibility={jobAnalysis.overallCompatibility}
+          recommendation={analysisData?.summary?.recommendation}
+          experienceRequirements={analysisData?.experienceRequirements}
+        />
+
+        <div className="flex gap-3">
+          <Button asChild>
+            <a
+              href={jobAnalysis.jobUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Ver Vaga no LinkedIn
+            </a>
+          </Button>
+          {jobAnalysis.recruiterUrl && (
+            <Button asChild variant="outline">
               <a
-                href={jobAnalysis.jobUrl}
+                href={jobAnalysis.recruiterUrl}
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                Ver Vaga no LinkedIn
+                Ver Perfil do Recrutador
               </a>
             </Button>
-            {jobAnalysis.recruiterUrl && (
-              <Button asChild variant="outline">
-                <a
-                  href={jobAnalysis.recruiterUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  Ver Perfil do Recrutador
-                </a>
-              </Button>
-            )}
+          )}
+        </div>
+
+        {analysisData?.location && analysisData?.workType && (
+          <div className="flex items-center gap-4 text-lg text-muted-foreground">
+            <span>{analysisData.location}</span>
+            <span>•</span>
+            <span>{analysisData.workType}</span>
           </div>
-        </header>
+        )}
+
         <div className="bg-muted p-6 rounded-lg border">
           <h2 className="text-xl font-semibold mb-4">✅ Dados Carregados com Sucesso</h2>
           <dl className="space-y-2">
