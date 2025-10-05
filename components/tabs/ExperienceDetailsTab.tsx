@@ -1,12 +1,43 @@
 import { Badge } from "@/components/ui/badge";
 import type { AnalysisData } from "@/lib/types";
-import { getConfidenceLevelVariant } from "@/lib/utils";
+import { 
+  SENIORITY_VARIANT_MAP, 
+  SENIORITY_LEVEL_FILTERS,
+  INFERENCE_SOURCE_VARIANT_MAP,
+  INFERENCE_SOURCE_FILTERS,
+  CONFIDENCE_LEVEL_VARIANT_MAP,
+  CONFIDENCE_LEVEL_FILTERS,
+} from "@/lib/constants";
 
 interface ExperienceDetailsTabProps {
   experienceRequirements: AnalysisData['experienceRequirements'];
 }
 
 export function ExperienceDetailsTab({ experienceRequirements }: ExperienceDetailsTabProps) {
+  const seniorityLabel = experienceRequirements?.seniorityLevel
+    ? SENIORITY_LEVEL_FILTERS.find(f => f.value === experienceRequirements.seniorityLevel)?.label || experienceRequirements.seniorityLevel
+    : null;
+
+  const seniorityVariant = experienceRequirements?.seniorityLevel
+    ? SENIORITY_VARIANT_MAP[experienceRequirements.seniorityLevel] || 'gray'
+    : 'gray';
+
+  const inferenceSourceLabel = experienceRequirements?.inferenceSource
+    ? INFERENCE_SOURCE_FILTERS.find(f => f.value === experienceRequirements.inferenceSource)?.label || experienceRequirements.inferenceSource
+    : null;
+
+  const inferenceSourceVariant = experienceRequirements?.inferenceSource
+    ? INFERENCE_SOURCE_VARIANT_MAP[experienceRequirements.inferenceSource] || 'gray'
+    : 'gray';
+
+  const confidenceLevelLabel = experienceRequirements?.confidenceLevel
+    ? CONFIDENCE_LEVEL_FILTERS.find(f => f.value === experienceRequirements.confidenceLevel)?.label || experienceRequirements.confidenceLevel
+    : null;
+
+  const confidenceLevelVariant = experienceRequirements?.confidenceLevel
+    ? CONFIDENCE_LEVEL_VARIANT_MAP[experienceRequirements.confidenceLevel] || 'gray'
+    : 'gray';
+
   return (
     <div className="bg-card p-6 rounded-lg border space-y-6">
       <h3 className="text-xl font-semibold mb-4">Experiência Detalhada</h3>
@@ -36,36 +67,40 @@ export function ExperienceDetailsTab({ experienceRequirements }: ExperienceDetai
               </div>
             )}
 
-            {experienceRequirements.seniorityLevel && (
+            {experienceRequirements.seniorityLevel && seniorityLabel && (
               <div className="space-y-1">
                 <p className="text-sm font-semibold text-foreground">
                   Nível de Senioridade
                 </p>
-                <p className="text-base text-muted-foreground">
-                  {experienceRequirements.seniorityLevel}
-                </p>
+                <div>
+                  <Badge variant={seniorityVariant}>
+                    {seniorityLabel}
+                  </Badge>
+                </div>
               </div>
             )}
 
-            {experienceRequirements.inferenceSource && (
+            {experienceRequirements.inferenceSource && inferenceSourceLabel && (
               <div className="space-y-1">
                 <p className="text-sm font-semibold text-foreground">
                   Fonte da Informação
                 </p>
-                <p className="text-base text-muted-foreground">
-                  {experienceRequirements.inferenceSource}
-                </p>
+                <div>
+                  <Badge variant={inferenceSourceVariant}>
+                    {inferenceSourceLabel}
+                  </Badge>
+                </div>
               </div>
             )}
 
-            {experienceRequirements.confidenceLevel && (
+            {experienceRequirements.confidenceLevel && confidenceLevelLabel && (
               <div className="space-y-1">
                 <p className="text-sm font-semibold text-foreground">
                   Nível de Confiança da IA
                 </p>
                 <div>
-                  <Badge variant={getConfidenceLevelVariant(experienceRequirements.confidenceLevel)}>
-                    {experienceRequirements.confidenceLevel}
+                  <Badge variant={confidenceLevelVariant}>
+                    {confidenceLevelLabel}
                   </Badge>
                 </div>
               </div>
