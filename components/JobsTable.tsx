@@ -10,6 +10,16 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from '@/components/ui/alert-dialog';
 import type { JobAnalysisRow } from '@/lib/types';
 import {
   getStatusBadgeVariant,
@@ -33,6 +43,7 @@ export default function JobsTable({ jobs }: JobsTableProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [ignoringJobs, setIgnoringJobs] = useState<Set<string>>(new Set());
+  const [jobToIgnore, setJobToIgnore] = useState<{ id: string; title: string } | null>(null);
 
   const handleSort = (field: string) => {
     const params = new URLSearchParams(searchParams.toString());
@@ -54,6 +65,7 @@ export default function JobsTable({ jobs }: JobsTableProps) {
 
   const handleIgnore = async (jobId: string, jobTitle: string) => {
     setIgnoringJobs(prev => new Set(prev).add(jobId));
+    setJobToIgnore(null);
 
     try {
       const result = await updateJobStatus(jobId, 'IGNORED');
@@ -80,141 +92,171 @@ export default function JobsTable({ jobs }: JobsTableProps) {
     }
   };
 
+  const openIgnoreDialog = (jobId: string, jobTitle: string) => {
+    setJobToIgnore({ id: jobId, title: jobTitle });
+  };
+
   return (
-    <div className="rounded-md border">
-      <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead>Status</TableHead>
-            <SortableHeader field="overallCompatibility" onSort={handleSort}>Compatibilidade</SortableHeader>
-            <TableHead>Vaga</TableHead>
-            <TableHead>Easy Apply</TableHead>
-            <TableHead>Senioridade</TableHead>
-            <TableHead>Experiência</TableHead>
-            <TableHead>Recomendação IA</TableHead>
-            <SortableHeader field="createdAt" onSort={handleSort}>Data da Análise</SortableHeader>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {jobs.length > 0 ? (
-            jobs.map((job) => (
-              <TableRow key={job.id}>
-                <TableCell>
-                  <Badge variant={getStatusBadgeVariant(job.manualStatus)}>
-                    {getFilterLabel(MANUAL_STATUS_FILTERS, job.manualStatus)}
-                  </Badge>
-                </TableCell>
-                <TableCell className="text-center">
-                  <span className={getCompatibilityColor(job.overallCompatibility)}>
-                    {job.overallCompatibility}%
-                  </span>
-                </TableCell>
-                <TableCell className="font-medium">
-                  <div className="flex flex-col">
-                    <a
-                      href={`/vaga/${job.id}`}
-                      className="text-blue-600 hover:underline font-bold"
-                    >
-                      {job.jobTitle}
-                    </a>
-                    <span className="text-sm text-muted-foreground mb-2">
-                      {job.companyName}
+    <>
+      <div className="rounded-md border">
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>Status</TableHead>
+              <SortableHeader field="overallCompatibility" onSort={handleSort}>Compatibilidade</SortableHeader>
+              <TableHead>Vaga</TableHead>
+              <TableHead>Easy Apply</TableHead>
+              <TableHead>Senioridade</TableHead>
+              <TableHead>Experiência</TableHead>
+              <TableHead>Recomendação IA</TableHead>
+              <SortableHeader field="createdAt" onSort={handleSort}>Data da Análise</SortableHeader>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {jobs.length > 0 ? (
+              jobs.map((job) => (
+                <TableRow key={job.id}>
+                  <TableCell>
+                    <Badge variant={getStatusBadgeVariant(job.manualStatus)}>
+                      {getFilterLabel(MANUAL_STATUS_FILTERS, job.manualStatus)}
+                    </Badge>
+                  </TableCell>
+                  <TableCell className="text-center">
+                    <span className={getCompatibilityColor(job.overallCompatibility)}>
+                      {job.overallCompatibility}%
                     </span>
-                    <div className="flex items-center gap-2 flex-wrap">
+                  </TableCell>
+                  <TableCell className="font-medium">
+                    <div className="flex flex-col">
                       <a
-                        href={job.jobUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
+                        href={`/vaga/${job.id}`}
+                        className="text-blue-600 hover:underline font-bold"
                       >
-                        <Badge
-                          variant="outline"
-                          className="cursor-pointer hover:bg-blue-50 border-blue-600 text-blue-600 text-xs"
-                        >
-                          LinkedIn
-                        </Badge>
+                        {job.jobTitle}
                       </a>
-                      {job.recruiterUrl && (
+                      <span className="text-sm text-muted-foreground mb-2">
+                        {job.companyName}
+                      </span>
+                      <div className="flex items-center gap-2 flex-wrap">
                         <a
-                          href={job.recruiterUrl}
+                          href={job.jobUrl}
                           target="_blank"
                           rel="noopener noreferrer"
                         >
                           <Badge
                             variant="outline"
-                            className="cursor-pointer hover:bg-orange-50 border-orange-600 text-orange-600 text-xs"
+                            className="cursor-pointer hover:bg-blue-50 border-blue-600 text-blue-600 text-xs"
                           >
-                            Recrutador
+                            LinkedIn
                           </Badge>
                         </a>
-                      )}
-                      {job.manualStatus !== 'IGNORED' && (
-                        <Badge
-                          variant="outline"
-                          className="cursor-pointer hover:bg-red-50 border-red-600 text-red-600 text-xs"
-                          onClick={(e) => {
-                            e.preventDefault();
-                            handleIgnore(job.id, job.jobTitle);
-                          }}
-                        >
-                          {ignoringJobs.has(job.id) ? (
-                            <>
-                              <Check className="size-3 mr-1" />
-                              Ignorando...
-                            </>
-                          ) : (
-                            <>
-                              Ignorar
-                            </>
-                          )}
-                        </Badge>
-                      )}
+                        {job.recruiterUrl && (
+                          <a
+                            href={job.recruiterUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
+                            <Badge
+                              variant="outline"
+                              className="cursor-pointer hover:bg-orange-50 border-orange-600 text-orange-600 text-xs"
+                            >
+                              Recrutador
+                            </Badge>
+                          </a>
+                        )}
+                        {job.manualStatus !== 'IGNORED' && (
+                          <Badge
+                            variant="outline"
+                            className="cursor-pointer hover:bg-red-50 border-red-600 text-red-600 text-xs"
+                            onClick={(e) => {
+                              e.preventDefault();
+                              openIgnoreDialog(job.id, job.jobTitle);
+                            }}
+                          >
+                            {ignoringJobs.has(job.id) ? (
+                              <>
+                                <Check className="size-3 mr-1" />
+                                Ignorando...
+                              </>
+                            ) : (
+                              <>
+                                Ignorar
+                              </>
+                            )}
+                          </Badge>
+                        )}
+                      </div>
                     </div>
-                  </div>
-                </TableCell>
-                <TableCell className="text-center">
-                  {job.hasEasyApply ? (
-                    <Badge variant="green">
-                      ✓ Sim
-                    </Badge>
-                  ) : (
-                    <Badge variant="gray">
-                      ✗ Não
-                    </Badge>
-                  )}
-                </TableCell>
-                <TableCell>
-                  <span className="text-sm">
-                    {job.seniorityLevel ? getFilterLabel(SENIORITY_LEVEL_FILTERS, job.seniorityLevel) : 'N/A'}
-                  </span>
-                </TableCell>
-                <TableCell>
-                  <span className="text-sm">
-                    {job.experienceRequired || 'N/A'}
-                  </span>
-                </TableCell>
-                <TableCell>
-                  {job.iaRecommendation ? (
-                    <Badge variant={getRecommendationBadgeVariant(job.iaRecommendation)}>
-                      {getFilterLabel(IA_RECOMMENDATION_FILTERS, job.iaRecommendation)}
-                    </Badge>
-                  ) : (
-                    <Badge variant="gray">N/A</Badge>
-                  )}
-                </TableCell>
-                <TableCell className="text-right text-sm text-gray-500">
-                  {formatDateTimeBR(job.createdAt)}
+                  </TableCell>
+                  <TableCell className="text-center">
+                    {job.hasEasyApply ? (
+                      <Badge variant="green">
+                        ✓ Sim
+                      </Badge>
+                    ) : (
+                      <Badge variant="gray">
+                        ✗ Não
+                      </Badge>
+                    )}
+                  </TableCell>
+                  <TableCell>
+                    <span className="text-sm">
+                      {job.seniorityLevel ? getFilterLabel(SENIORITY_LEVEL_FILTERS, job.seniorityLevel) : 'N/A'}
+                    </span>
+                  </TableCell>
+                  <TableCell>
+                    <span className="text-sm">
+                      {job.experienceRequired || 'N/A'}
+                    </span>
+                  </TableCell>
+                  <TableCell>
+                    {job.iaRecommendation ? (
+                      <Badge variant={getRecommendationBadgeVariant(job.iaRecommendation)}>
+                        {getFilterLabel(IA_RECOMMENDATION_FILTERS, job.iaRecommendation)}
+                      </Badge>
+                    ) : (
+                      <Badge variant="gray">N/A</Badge>
+                    )}
+                  </TableCell>
+                  <TableCell className="text-right text-sm text-gray-500">
+                    {formatDateTimeBR(job.createdAt)}
+                  </TableCell>
+                </TableRow>
+              ))
+            ) : (
+              <TableRow>
+                <TableCell colSpan={8} className="text-center py-8 text-gray-500">
+                  Nenhuma vaga pendente encontrada.
                 </TableCell>
               </TableRow>
-            ))
-          ) : (
-            <TableRow>
-              <TableCell colSpan={8} className="text-center py-8 text-gray-500">
-                Nenhuma vaga pendente encontrada.
-              </TableCell>
-            </TableRow>
-          )}
-        </TableBody>
-      </Table>
-    </div>
+            )}
+          </TableBody>
+        </Table>
+      </div>
+
+      <AlertDialog open={!!jobToIgnore} onOpenChange={(open) => !open && setJobToIgnore(null)}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Tem certeza que deseja ignorar esta vaga?</AlertDialogTitle>
+            <AlertDialogDescription>
+              A vaga <strong>{jobToIgnore?.title}</strong> será marcada como ignorada e não aparecerá mais na lista de vagas pendentes.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancelar</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={() => {
+                if (jobToIgnore) {
+                  handleIgnore(jobToIgnore.id, jobToIgnore.title);
+                }
+              }}
+              className="bg-red-600 hover:bg-red-700"
+            >
+              Ignorar Vaga
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+    </>
   );
 }
