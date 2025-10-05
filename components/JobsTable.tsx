@@ -34,6 +34,7 @@ import SortableHeader from '@/components/SortableHeader';
 import { updateJobStatus } from '@/app/actions';
 import { toast } from 'sonner';
 import { Check } from 'lucide-react';
+import CompatibilityDonut from '@/components/CompatibilityDonut';
 
 interface JobsTableProps {
   jobs: JobAnalysisRow[];
@@ -122,9 +123,9 @@ export default function JobsTable({ jobs }: JobsTableProps) {
                     </Badge>
                   </TableCell>
                   <TableCell className="text-center">
-                    <span className={getCompatibilityColor(job.overallCompatibility)}>
-                      {job.overallCompatibility}%
-                    </span>
+                    <div className="flex justify-center">
+                      <CompatibilityDonut score={job.overallCompatibility} size="md" showLabel={false} />
+                    </div>
                   </TableCell>
                   <TableCell className="font-medium">
                     <div className="flex flex-col">
