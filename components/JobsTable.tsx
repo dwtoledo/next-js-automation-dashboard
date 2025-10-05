@@ -126,7 +126,7 @@ export default function JobsTable({ jobs }: JobsTableProps) {
                       <CompatibilityDonut score={job.overallCompatibility} size="md" showLabel={false} />
                     </div>
                   </TableCell>
-                  <TableCell className="font-medium">
+                  <TableCell className="font-medium whitespace-normal">
                     <div className="flex flex-col">
                       <a
                         href={`/vaga/${job.id}`}
