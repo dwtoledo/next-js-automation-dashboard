@@ -56,8 +56,21 @@ export function getStatusBadgeVariant(status: string): BadgeVariant {
   return STATUS_VARIANT_MAP[status] || 'gray';
 }
 
+export function getStatusOutlineVariant(status: string): BadgeVariant {
+  const baseVariant = STATUS_VARIANT_MAP[status] || 'gray';
+  return `outline-${baseVariant}` as BadgeVariant;
+}
+
 export function getRecommendationBadgeVariant(recommendation: string): BadgeVariant {
   return RECOMMENDATION_VARIANT_MAP[recommendation] || 'gray';
+}
+
+export function getRecommendationOutlineVariant(recommendation: string): BadgeVariant {
+  const baseVariant = RECOMMENDATION_VARIANT_MAP[recommendation];
+  if (baseVariant === 'green') return 'outline-green';
+  if (baseVariant === 'red') return 'outline-red';
+  if (baseVariant === 'amber') return 'outline-amber';
+  return 'outline-gray';
 }
 
 export function getSeniorityBadgeVariant(seniority: string): BadgeVariant {

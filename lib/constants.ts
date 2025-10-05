@@ -21,6 +21,16 @@ export const BADGE_COLORS = {
   sky: 'border-transparent bg-sky-100 text-sky-800 [a&]:hover:bg-sky-200',
   violet: 'border-transparent bg-violet-100 text-violet-800 [a&]:hover:bg-violet-200',
   fuchsia: 'border-transparent bg-fuchsia-100 text-fuchsia-800 [a&]:hover:bg-fuchsia-200',
+  'outline-green': 'border-green-500 text-green-700 [a&]:hover:bg-green-50',
+  'outline-red': 'border-red-500 text-red-700 [a&]:hover:bg-red-50',
+  'outline-amber': 'border-amber-500 text-amber-700 [a&]:hover:bg-amber-50',
+  'outline-gray': 'border-gray-400 text-gray-600 [a&]:hover:bg-gray-50',
+  'outline-yellow': 'border-yellow-500 text-yellow-700 [a&]:hover:bg-yellow-50',
+  'outline-blue': 'border-blue-500 text-blue-700 [a&]:hover:bg-blue-50',
+  'outline-purple': 'border-purple-500 text-purple-700 [a&]:hover:bg-purple-50',
+  'outline-indigo': 'border-indigo-500 text-indigo-700 [a&]:hover:bg-indigo-50',
+  'outline-emerald': 'border-emerald-500 text-emerald-700 [a&]:hover:bg-emerald-50',
+  'outline-orange': 'border-orange-500 text-orange-700 [a&]:hover:bg-orange-50',
 } as const;
 
 export type BadgeVariant = keyof typeof BADGE_COLORS | 'default' | 'secondary' | 'destructive' | 'outline';
@@ -251,6 +261,16 @@ export const TEXT_COLOR_CLASSES: Record<BadgeVariant, string> = {
   violet: 'text-violet-800 dark:text-violet-200',
   fuchsia: 'text-fuchsia-800 dark:text-fuchsia-200',
   gray: 'text-gray-800 dark:text-gray-200',
+  'outline-green': 'text-green-700 dark:text-green-300',
+  'outline-red': 'text-red-700 dark:text-red-300',
+  'outline-amber': 'text-amber-700 dark:text-amber-300',
+  'outline-gray': 'text-gray-600 dark:text-gray-400',
+  'outline-yellow': 'text-yellow-700 dark:text-yellow-300',
+  'outline-blue': 'text-blue-700 dark:text-blue-300',
+  'outline-purple': 'text-purple-700 dark:text-purple-300',
+  'outline-indigo': 'text-indigo-700 dark:text-indigo-300',
+  'outline-emerald': 'text-emerald-700 dark:text-emerald-300',
+  'outline-orange': 'text-orange-700 dark:text-orange-300',
 } as const;
 
 export const PROGRESS_BAR_CLASSES: Record<string, string> = {
