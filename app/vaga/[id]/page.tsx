@@ -7,6 +7,7 @@ import { BackButton } from '@/components/BackButton';
 import { JobDetailHeader } from '@/components/JobDetailHeader';
 import { QuickVerdict } from '@/components/QuickVerdict';
 import { AnalysisSummary } from '@/components/AnalysisSummary';
+import { DetailedAnalysisTabs } from '@/components/DetailedAnalysisTabs';
 
 interface JobDetailsPageProps {
   params: Promise<{
@@ -62,10 +63,32 @@ export default async function JobDetailsPage({ params }: JobDetailsPageProps) {
   return (
     <div className="container mx-auto py-8 px-4">
       <div className="max-w-4xl mx-auto space-y-6">
-        <div>
+        <div className="flex items-center justify-start gap-3">
           <BackButton>
             ← Voltar ao Dashboard
           </BackButton>
+          <div className="flex gap-3">
+            <Button asChild variant="outline" size="sm">
+              <a
+                href={jobAnalysis.jobUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Ver Vaga no LinkedIn
+              </a>
+            </Button>
+            {jobAnalysis.recruiterUrl && (
+              <Button asChild variant="outline" size="sm">
+                <a
+                  href={jobAnalysis.recruiterUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Ver Perfil do Recrutador
+                </a>
+              </Button>
+            )}
+          </div>
         </div>
         
         <JobDetailHeader
@@ -85,29 +108,6 @@ export default async function JobDetailsPage({ params }: JobDetailsPageProps) {
 
         <AnalysisSummary summary={analysisData?.summary} />
 
-        <div className="flex gap-3">
-          <Button asChild>
-            <a
-              href={jobAnalysis.jobUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Ver Vaga no LinkedIn
-            </a>
-          </Button>
-          {jobAnalysis.recruiterUrl && (
-            <Button asChild variant="outline">
-              <a
-                href={jobAnalysis.recruiterUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Ver Perfil do Recrutador
-              </a>
-            </Button>
-          )}
-        </div>
-
         {analysisData?.location && analysisData?.workType && (
           <div className="flex items-center gap-4 text-lg text-muted-foreground">
             <span>{analysisData.location}</span>
@@ -116,60 +116,11 @@ export default async function JobDetailsPage({ params }: JobDetailsPageProps) {
           </div>
         )}
 
-        <div className="bg-muted p-6 rounded-lg border">
-          <h2 className="text-xl font-semibold mb-4">✅ Dados Carregados com Sucesso</h2>
-          <dl className="space-y-2">
-            <div>
-              <dt className="font-semibold inline">ID:</dt>
-              <dd className="inline ml-2 text-muted-foreground">{jobAnalysis.id}</dd>
-            </div>
-            <div>
-              <dt className="font-semibold inline">Título da Vaga:</dt>
-              <dd className="inline ml-2">{jobAnalysis.jobTitle}</dd>
-            </div>
-            <div>
-              <dt className="font-semibold inline">Empresa:</dt>
-              <dd className="inline ml-2">{jobAnalysis.companyName}</dd>
-            </div>
-            <div>
-              <dt className="font-semibold inline">Compatibilidade:</dt>
-              <dd className="inline ml-2">{jobAnalysis.overallCompatibility}%</dd>
-            </div>
-            <div>
-              <dt className="font-semibold inline">Status:</dt>
-              <dd className="inline ml-2">{jobAnalysis.manualStatus}</dd>
-            </div>
-            <div>
-              <dt className="font-semibold inline">Data de Criação:</dt>
-              <dd className="inline ml-2">{new Date(jobAnalysis.createdAt).toLocaleDateString('pt-BR')}</dd>
-            </div>
-            <div>
-              <dt className="font-semibold inline">AnalysisData Validado:</dt>
-              <dd className="inline ml-2">{analysisData ? '✅ Sim' : '❌ Erro na validação'}</dd>
-            </div>
-          </dl>
-        </div>
         {analysisData && (
-          <div className="space-y-4">
-            {analysisData.experienceRequirements && (
-              <div className="bg-card p-4 rounded-lg border">
-                <h3 className="text-lg font-semibold mb-2">Requisitos de Experiência</h3>
-                {analysisData.experienceRequirements.minimumYears && (
-                  <p>Mínimo: {analysisData.experienceRequirements.minimumYears}+ anos</p>
-                )}
-                {analysisData.experienceRequirements.seniorityLevel && (
-                  <p>Nível: {analysisData.experienceRequirements.seniorityLevel}</p>
-                )}
-              </div>
-            )}
-
-            {analysisData.summary?.recommendation && (
-              <div className="bg-card p-4 rounded-lg border">
-                <h3 className="text-lg font-semibold mb-2">Recomendação da IA</h3>
-                <p>{analysisData.summary.recommendation}</p>
-              </div>
-            )}
-          </div>
+          <DetailedAnalysisTabs 
+            analysisData={analysisData} 
+            jobDescription={jobAnalysis.jobDescription}
+          />
         )}
       </div>
     </div>
