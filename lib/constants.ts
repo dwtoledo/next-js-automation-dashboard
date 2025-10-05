@@ -166,6 +166,49 @@ export const TOAST_CLASS_NAMES = {
   error: "group-[.toaster]:!bg-red-50 group-[.toaster]:!text-red-900 group-[.toaster]:!border-red-200 dark:group-[.toaster]:!bg-red-950 dark:group-[.toaster]:!text-red-100 dark:group-[.toaster]:!border-red-800 [&_[data-description]]:!text-red-800 dark:[&_[data-description]]:!text-red-200",
 } as const;
 
+export const TEXT_COLOR_CLASSES: Record<BadgeVariant, string> = {
+  default: 'text-gray-800 dark:text-gray-200',
+  secondary: 'text-gray-800 dark:text-gray-200',
+  destructive: 'text-red-800 dark:text-red-200',
+  outline: 'text-gray-800 dark:text-gray-200',
+  red: 'text-red-800 dark:text-red-200',
+  orange: 'text-orange-800 dark:text-orange-200',
+  yellow: 'text-yellow-800 dark:text-yellow-200',
+  green: 'text-green-800 dark:text-green-200',
+  blue: 'text-blue-800 dark:text-blue-200',
+  purple: 'text-purple-800 dark:text-purple-200',
+  emerald: 'text-emerald-800 dark:text-emerald-200',
+  indigo: 'text-indigo-800 dark:text-indigo-200',
+  amber: 'text-amber-800 dark:text-amber-200',
+  cyan: 'text-cyan-800 dark:text-cyan-200',
+  sky: 'text-sky-800 dark:text-sky-200',
+  violet: 'text-violet-800 dark:text-violet-200',
+  fuchsia: 'text-fuchsia-800 dark:text-fuchsia-200',
+  gray: 'text-gray-800 dark:text-gray-200',
+} as const;
+
+export const PROGRESS_BAR_CLASSES: Record<string, string> = {
+  red: '[&>div]:bg-red-500 bg-red-100 dark:[&>div]:bg-red-600 dark:bg-red-950',
+  orange: '[&>div]:bg-orange-500 bg-orange-100 dark:[&>div]:bg-orange-600 dark:bg-orange-950',
+  yellow: '[&>div]:bg-yellow-500 bg-yellow-100 dark:[&>div]:bg-yellow-600 dark:bg-yellow-950',
+  green: '[&>div]:bg-green-500 bg-green-100 dark:[&>div]:bg-green-600 dark:bg-green-950',
+  blue: '[&>div]:bg-blue-500 bg-blue-100 dark:[&>div]:bg-blue-600 dark:bg-blue-950',
+  purple: '[&>div]:bg-purple-500 bg-purple-100 dark:[&>div]:bg-purple-600 dark:bg-purple-950',
+  gray: '[&>div]:bg-gray-500 bg-gray-100 dark:[&>div]:bg-gray-600 dark:bg-gray-950',
+} as const;
+
+export const COMPATIBILITY_SCORE_RANGES = [
+  { max: 50, variant: 'red' as BadgeVariant },
+  { max: 70, variant: 'orange' as BadgeVariant },
+  { max: 85, variant: 'yellow' as BadgeVariant },
+  { max: 100, variant: 'green' as BadgeVariant },
+] as const;
+
+export function getCompatibilityVariant(score: number): BadgeVariant {
+  const range = COMPATIBILITY_SCORE_RANGES.find(r => score < r.max);
+  return range?.variant || 'green';
+}
+
 export const HEADER_CONFIG: Record<string, { title: string; description: string }> = {
   "/dashboard": {
     title: "Dashboard de Vagas",
@@ -175,4 +218,10 @@ export const HEADER_CONFIG: Record<string, { title: string; description: string 
     title: "LinkedIn Job Automation",
     description: "Projeto para automação de análises de vagas no LinkedIn.",
   },
+} as const;
+
+export const DATE_FORMATS = {
+  FULL_DATE_TIME: "dd 'de' MMMM 'de' yyyy 'às' HH:mm'hrs'",
+  SHORT_DATE: "dd/MM/yyyy",
+  DATE_WITH_TIME: "dd/MM/yyyy 'às' HH:mm",
 } as const;
