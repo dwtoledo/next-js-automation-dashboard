@@ -62,7 +62,7 @@ export default async function JobDetailsPage({ params }: JobDetailsPageProps) {
 
   return (
     <div className="container mx-auto py-8 px-4">
-      <div className="max-w-4xl mx-auto space-y-6">
+      <div className="max-w-7xl mx-auto space-y-6">
         <div className="flex items-center justify-start gap-3">
           <BackButton>
             ← Voltar ao Dashboard
@@ -74,7 +74,7 @@ export default async function JobDetailsPage({ params }: JobDetailsPageProps) {
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                Ver Vaga no LinkedIn
+                Ver no LinkedIn
               </a>
             </Button>
             {jobAnalysis.recruiterUrl && (
@@ -84,7 +84,7 @@ export default async function JobDetailsPage({ params }: JobDetailsPageProps) {
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  Ver Perfil do Recrutador
+                  Ver Recrutador
                 </a>
               </Button>
             )}
@@ -104,6 +104,9 @@ export default async function JobDetailsPage({ params }: JobDetailsPageProps) {
           overallCompatibility={jobAnalysis.overallCompatibility}
           recommendation={analysisData?.summary?.recommendation}
           experienceRequirements={analysisData?.experienceRequirements}
+          jobId={jobAnalysis.id}
+          initialManualStatus={jobAnalysis.manualStatus}
+          initialManualNotes={jobAnalysis.manualNotes}
         />
 
         <AnalysisSummary summary={analysisData?.summary} />
