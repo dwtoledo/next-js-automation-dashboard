@@ -6,6 +6,7 @@ import type { Metadata } from 'next';
 import { BackButton } from '@/components/BackButton';
 import { JobDetailHeader } from '@/components/JobDetailHeader';
 import { QuickVerdict } from '@/components/QuickVerdict';
+import { AnalysisSummary } from '@/components/AnalysisSummary';
 
 interface JobDetailsPageProps {
   params: Promise<{
@@ -81,6 +82,8 @@ export default async function JobDetailsPage({ params }: JobDetailsPageProps) {
           recommendation={analysisData?.summary?.recommendation}
           experienceRequirements={analysisData?.experienceRequirements}
         />
+
+        <AnalysisSummary summary={analysisData?.summary} />
 
         <div className="flex gap-3">
           <Button asChild>
