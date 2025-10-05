@@ -30,10 +30,10 @@ export default function SortableHeader({ field, children, className, onSort }: S
 
   return (
     <TableHead
-      className={`cursor-pointer hover:bg-gray-50 select-none ${className || ''}`}
+      className={`cursor-pointer hover:bg-gray-50 select-none text-center ${className || ''}`}
       onClick={() => onSort(field)}
     >
-      <div className="flex items-center">
+      <div className="flex items-center justify-center">
         {children}
         {getSortIcon()}
       </div>
