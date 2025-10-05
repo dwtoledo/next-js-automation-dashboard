@@ -140,18 +140,15 @@ export function getScoreColorVariant(score: number): 'green' | 'yellow' | 'orang
 
 export function formatCategoryName(key: string): string {
   const categoryMap: Record<string, string> = {
+    alignment: 'Alinhamento',
+    education: 'Educação',
     technical: 'Técnico',
     experience: 'Experiência',
-    education: 'Educação',
-    soft_skills: 'Soft Skills',
-    cultural_fit: 'Fit Cultural',
-    language: 'Idiomas',
+    softSkills: 'Soft Skills',
   };
   
   return categoryMap[key] || key.charAt(0).toUpperCase() + key.slice(1).replace(/_/g, ' ');
-}
-
-export function getConfidenceLevelVariant(level: string | undefined): 'green' | 'yellow' | 'red' | 'gray' {
+}export function getConfidenceLevelVariant(level: string | undefined): 'green' | 'yellow' | 'red' | 'gray' {
   switch (level) {
     case 'High':
       return 'green';
