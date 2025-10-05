@@ -18,7 +18,7 @@ import {
   formatDateTimeBR,
   getCompatibilityColor
 } from '@/lib/utils';
-import { IA_RECOMMENDATION_FILTERS, MANUAL_STATUS_FILTERS } from '@/lib/constants';
+import { IA_RECOMMENDATION_FILTERS, MANUAL_STATUS_FILTERS, SENIORITY_LEVEL_FILTERS } from '@/lib/constants';
 import { useRouter, useSearchParams } from 'next/navigation';
 import SortableHeader from '@/components/SortableHeader';
 import { updateJobStatus } from '@/app/actions';
@@ -184,7 +184,7 @@ export default function JobsTable({ jobs }: JobsTableProps) {
                 </TableCell>
                 <TableCell>
                   <span className="text-sm">
-                    {job.seniorityLevel || 'N/A'}
+                    {job.seniorityLevel ? getFilterLabel(SENIORITY_LEVEL_FILTERS, job.seniorityLevel) : 'N/A'}
                   </span>
                 </TableCell>
                 <TableCell>
