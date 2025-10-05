@@ -1,11 +1,16 @@
 import { z } from 'zod';
 
+const InferenceSourceEnum = z.enum(['Explicit', 'Title', 'Responsibilities', 'Context', 'Unknown']);
+const ConfidenceLevelEnum = z.enum(['High', 'Medium', 'Low', 'None']);
+const SeniorityLevelEnum = z.enum(['Entry', 'Junior', 'Mid', 'Senior', 'Lead', 'Principal', 'Unknown']);
+const RecommendationEnum = z.enum(['advance', 'reject', 'evaluate_with_reservations']);
+
 const ExperienceRequirementsSchema = z.object({
   minimumYears: z.number().optional(),
   preferredYears: z.number().optional(),
-  seniorityLevel: z.string().optional(),
-  inferenceSource: z.string().optional(),
-  confidenceLevel: z.enum(['High', 'Medium', 'Low']).optional(),
+  seniorityLevel: SeniorityLevelEnum.optional(),
+  inferenceSource: InferenceSourceEnum.optional(),
+  confidenceLevel: ConfidenceLevelEnum.optional(),
   reasoningText: z.string().optional(),
   specificExperience: z.array(z.string()).optional(),
   ambiguityFlags: z.array(z.string()).optional(),
@@ -14,7 +19,7 @@ const ExperienceRequirementsSchema = z.object({
 });
 
 const SummarySchema = z.object({
-  recommendation: z.string().optional(),
+  recommendation: RecommendationEnum.optional(),
   keyPoints: z.array(z.string()).optional(),
   strengths: z.array(z.string()).optional(),
   concerns: z.array(z.string()).optional(),
@@ -50,3 +55,7 @@ export const AnalysisDataSchema = z.object({
 });
 
 export type AnalysisData = z.infer<typeof AnalysisDataSchema>;
+export type InferenceSource = z.infer<typeof InferenceSourceEnum>;
+export type ConfidenceLevel = z.infer<typeof ConfidenceLevelEnum>;
+export type SeniorityLevel = z.infer<typeof SeniorityLevelEnum>;
+export type Recommendation = z.infer<typeof RecommendationEnum>;
