@@ -1,7 +1,7 @@
 import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import { Badge } from '@/components/ui/badge';
-import { STATUS_VARIANT_MAP, DATE_FORMATS } from '@/lib/constants';
+import { STATUS_VARIANT_MAP, DATE_FORMATS, MANUAL_STATUS_FILTERS } from '@/lib/constants';
 import type { BadgeVariant } from '@/lib/constants';
 
 interface JobDetailHeaderProps {
@@ -22,6 +22,8 @@ export function JobDetailHeader({
   updatedAt,
 }: JobDetailHeaderProps) {
   const statusVariant: BadgeVariant = STATUS_VARIANT_MAP[manualStatus] || 'gray';
+  const statusLabel = MANUAL_STATUS_FILTERS.find(filter => filter.value === manualStatus)?.label || manualStatus;
+  
   const formattedCreatedAt = format(createdAt, DATE_FORMATS.FULL_DATE_TIME, {
     locale: ptBR,
   });
@@ -41,11 +43,11 @@ export function JobDetailHeader({
       </div>
       <div className="flex flex-wrap items-center gap-2">
         <Badge variant={statusVariant}>
-          {manualStatus}
+          {statusLabel}
         </Badge>
         {hasEasyApply && (
           <Badge variant="green">
-            ⚡️ Easy Apply
+            Easy Apply
           </Badge>
         )}
       </div>
