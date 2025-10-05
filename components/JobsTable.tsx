@@ -102,9 +102,9 @@ export default function JobsTable({ jobs }: JobsTableProps) {
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead className="text-center">Status</TableHead>
               <SortableHeader field="overallCompatibility" onSort={handleSort}>Compatibilidade</SortableHeader>
               <TableHead>Vaga</TableHead>
+              <TableHead className="text-center">Status</TableHead>
               <TableHead className="text-center">Recomendação IA</TableHead>
               <TableHead className="text-center">Experiência</TableHead>
               <TableHead className="text-center">Senioridade</TableHead>
@@ -116,11 +116,6 @@ export default function JobsTable({ jobs }: JobsTableProps) {
             {jobs.length > 0 ? (
               jobs.map((job) => (
                 <TableRow key={job.id}>
-                  <TableCell className="text-center">
-                    <Badge variant={getStatusOutlineVariant(job.manualStatus)}>
-                      {getFilterLabel(MANUAL_STATUS_FILTERS, job.manualStatus)}
-                    </Badge>
-                  </TableCell>
                   <TableCell className="text-center">
                     <div className="flex justify-center">
                       <CompatibilityDonut score={job.overallCompatibility} size="md" showLabel={false} />
@@ -197,6 +192,11 @@ export default function JobsTable({ jobs }: JobsTableProps) {
                         )}
                       </div>
                     </div>
+                  </TableCell>
+                  <TableCell className="text-center">
+                    <Badge variant={getStatusOutlineVariant(job.manualStatus)}>
+                      {getFilterLabel(MANUAL_STATUS_FILTERS, job.manualStatus)}
+                    </Badge>
                   </TableCell>
                   <TableCell className="text-center">
                     {job.iaRecommendation ? (
