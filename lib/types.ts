@@ -48,3 +48,9 @@ export interface JobAnalysisSearchParams {
   page?: string;
   limit?: string;
 }
+
+export interface ExperienceRequirements {
+  minimumYears?: number;
+  seniorityLevel?: string;
+  inferenceSource?: string;
+}
