@@ -5,7 +5,7 @@ import prisma from '@/lib/prisma';
 import { ManualStatus } from '@prisma/client';
 
 export async function updateJobStatus(id: string, newStatus: ManualStatus) {
-  try {    
+  try {
     await prisma.jobAnalysis.update({
       where: {
         id,
@@ -31,7 +31,11 @@ interface UpdateJobDetailsParams {
   manualNotes?: string;
 }
 
-export async function updateJobDetails({ id, manualStatus, manualNotes }: UpdateJobDetailsParams) {
+export async function updateJobDetails({
+  id,
+  manualStatus,
+  manualNotes
+}: UpdateJobDetailsParams) {
   try {
     const updateData: {
       manualStatus?: ManualStatus;
@@ -45,7 +49,19 @@ export async function updateJobDetails({ id, manualStatus, manualNotes }: Update
     }
 
     if (manualNotes !== undefined) {
-      updateData.manualNotes = manualNotes;
+      const sanitized = manualNotes
+        .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '')
+        .replace(/<[^>]+>/g, '')
+        .trim();
+
+      if (sanitized.length > 2000) {
+        return {
+          success: false,
+          error: 'Anotações excedem 2000 caracteres'
+        };
+      }
+
+      updateData.manualNotes = sanitized;
     }
 
     await prisma.jobAnalysis.update({
@@ -59,6 +75,9 @@ export async function updateJobDetails({ id, manualStatus, manualNotes }: Update
     return { success: true };
   } catch (error) {
     console.error('Error updating job details:', error);
-    return { success: false, error: 'Failed to update job details' };
+    return {
+      success: false,
+      error: 'Falha ao atualizar detalhes da vaga'
+    };
   }
 }
