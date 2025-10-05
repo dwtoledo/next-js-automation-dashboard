@@ -54,3 +54,11 @@ export interface ExperienceRequirements {
   seniorityLevel?: string;
   inferenceSource?: string;
 }
+
+export interface AnalysisSummary {
+  recommendation?: string;
+  keyPoints?: string[];
+  strengths?: string[];
+  concerns?: string[];
+  reasoning?: string;
+}
