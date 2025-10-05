@@ -105,11 +105,10 @@ export default function JobsTable({ jobs }: JobsTableProps) {
               <SortableHeader field="overallCompatibility" onSort={handleSort}>Compatibilidade</SortableHeader>
               <TableHead>Vaga</TableHead>
               <TableHead className="text-center">Status</TableHead>
-              <TableHead className="text-center">Recomendação IA</TableHead>
+              <TableHead className="text-center">Recomendação da IA</TableHead>
               <TableHead className="text-center">Experiência</TableHead>
               <TableHead className="text-center">Senioridade</TableHead>
-              <TableHead className="text-center">Easy Apply</TableHead>
-              <SortableHeader field="createdAt" onSort={handleSort}>Data da Análise</SortableHeader>
+              <SortableHeader field="createdAt" onSort={handleSort}>Data</SortableHeader>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -123,13 +122,20 @@ export default function JobsTable({ jobs }: JobsTableProps) {
                   </TableCell>
                   <TableCell className="font-medium whitespace-normal">
                     <div className="flex flex-col">
-                      <a
-                        href={`/vaga/${job.id}`}
-                        className="text-foreground hover:underline font-bold"
-                        title={job.jobTitle}
-                      >
-                        {job.jobTitle}
-                      </a>
+                      <div className="mb-1">
+                        <a
+                          href={`/vaga/${job.id}`}
+                          className="text-foreground hover:underline font-bold"
+                          title={job.jobTitle}
+                        >
+                          {job.jobTitle}
+                        </a>
+                        {job.hasEasyApply && (
+                          <Badge variant="outline-green" className="text-[10px] px-1 py-0 ml-1.5 inline-flex align-middle h-4">
+                            Easy Apply
+                          </Badge>
+                        )}
+                      </div>
                       <span className="text-xs text-muted-foreground mb-2">
                         {job.companyName}
                       </span>
@@ -208,24 +214,21 @@ export default function JobsTable({ jobs }: JobsTableProps) {
                     )}
                   </TableCell>
                   <TableCell className="text-center">
-                    <span className="text-sm">
-                      {job.experienceRequired || 'N/A'}
-                    </span>
-                  </TableCell>
-                  <TableCell className="text-center">
-                    <span className="text-sm">
-                      {job.seniorityLevel ? getFilterLabel(SENIORITY_LEVEL_FILTERS, job.seniorityLevel) : 'N/A'}
-                    </span>
-                  </TableCell>
-                  <TableCell className="text-center">
-                    {job.hasEasyApply ? (
-                      <Badge variant="outline-green">
-                        ✓ Sim
+                    {job.experienceRequired ? (
+                      <Badge variant="outline-gray">
+                        {job.experienceRequired}
                       </Badge>
                     ) : (
+                      <Badge variant="outline-gray">N/A</Badge>
+                    )}
+                  </TableCell>
+                  <TableCell className="text-center">
+                    {job.seniorityLevel ? (
                       <Badge variant="outline-gray">
-                        ✗ Não
+                        {getFilterLabel(SENIORITY_LEVEL_FILTERS, job.seniorityLevel)}
                       </Badge>
+                    ) : (
+                      <span className="text-sm text-muted-foreground">N/A</span>
                     )}
                   </TableCell>
                   <TableCell className="text-center text-sm text-gray-500">
@@ -235,7 +238,7 @@ export default function JobsTable({ jobs }: JobsTableProps) {
               ))
             ) : (
               <TableRow>
-                <TableCell colSpan={8} className="text-center py-8 text-gray-500">
+                <TableCell colSpan={7} className="text-center py-8 text-gray-500">
                   Nenhuma vaga pendente encontrada.
                 </TableCell>
               </TableRow>
