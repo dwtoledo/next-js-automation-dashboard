@@ -26,14 +26,13 @@ import {
   getRecommendationBadgeVariant,
   getFilterLabel,
   formatDateTimeBR,
-  getCompatibilityColor
 } from '@/lib/utils';
 import { IA_RECOMMENDATION_FILTERS, MANUAL_STATUS_FILTERS, SENIORITY_LEVEL_FILTERS } from '@/lib/constants';
 import { useRouter, useSearchParams } from 'next/navigation';
 import SortableHeader from '@/components/SortableHeader';
 import { updateJobStatus } from '@/app/actions';
 import { toast } from 'sonner';
-import { Check } from 'lucide-react';
+import { Linkedin, User, X, Loader2, NotepadText } from 'lucide-react';
 import CompatibilityDonut from '@/components/CompatibilityDonut';
 
 interface JobsTableProps {
@@ -131,24 +130,37 @@ export default function JobsTable({ jobs }: JobsTableProps) {
                     <div className="flex flex-col">
                       <a
                         href={`/vaga/${job.id}`}
-                        className="text-blue-600 hover:underline font-bold"
+                        className="text-foreground hover:underline font-bold"
+                        title={job.jobTitle}
                       >
                         {job.jobTitle}
                       </a>
-                      <span className="text-sm text-muted-foreground mb-2">
+                      <span className="text-xs text-muted-foreground mb-2">
                         {job.companyName}
                       </span>
-                      <div className="flex items-center gap-2 flex-wrap">
+                      <div className="flex items-center gap-1.5 flex-wrap">
+                        <a
+                          href={`/vaga/${job.id}`}
+                          title="Ver detalhes da vaga"
+                        >
+                          <Badge
+                            variant="outline"
+                            className="cursor-pointer hover:bg-accent p-1 h-7 w-7 flex items-center justify-center"
+                          >
+                            <NotepadText className="size-4" />
+                          </Badge>
+                        </a>
                         <a
                           href={job.jobUrl}
                           target="_blank"
                           rel="noopener noreferrer"
+                          title="Abrir no LinkedIn"
                         >
                           <Badge
                             variant="outline"
-                            className="cursor-pointer hover:bg-blue-50 border-blue-600 text-blue-600 text-xs"
+                            className="cursor-pointer hover:bg-accent p-1 h-7 w-7 flex items-center justify-center"
                           >
-                            LinkedIn
+                            <Linkedin className="size-4" />
                           </Badge>
                         </a>
                         {job.recruiterUrl && (
@@ -156,33 +168,30 @@ export default function JobsTable({ jobs }: JobsTableProps) {
                             href={job.recruiterUrl}
                             target="_blank"
                             rel="noopener noreferrer"
+                            title="Perfil do Recrutador"
                           >
                             <Badge
                               variant="outline"
-                              className="cursor-pointer hover:bg-orange-50 border-orange-600 text-orange-600 text-xs"
+                              className="cursor-pointer hover:bg-accent p-1 h-7 w-7 flex items-center justify-center"
                             >
-                              Recrutador
+                              <User className="size-4" />
                             </Badge>
                           </a>
                         )}
                         {job.manualStatus !== 'IGNORED' && (
                           <Badge
                             variant="outline"
-                            className="cursor-pointer hover:bg-red-50 border-red-600 text-red-600 text-xs"
+                            className="cursor-pointer hover:bg-accent p-1 h-7 w-7 flex items-center justify-center"
                             onClick={(e) => {
                               e.preventDefault();
                               openIgnoreDialog(job.id, job.jobTitle);
                             }}
+                            title={ignoringJobs.has(job.id) ? "Ignorando..." : "Ignorar vaga"}
                           >
                             {ignoringJobs.has(job.id) ? (
-                              <>
-                                <Check className="size-3 mr-1" />
-                                Ignorando...
-                              </>
+                              <Loader2 className="size-4 animate-spin" />
                             ) : (
-                              <>
-                                Ignorar
-                              </>
+                              <X className="size-4" />
                             )}
                           </Badge>
                         )}
