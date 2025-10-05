@@ -124,17 +124,10 @@ export function formatDateTimeBR(date: Date): string {
   });
 }
 
-export function getCompatibilityColor(score: number): string {
-  if (score >= 80) return 'text-green-600 font-semibold';
-  if (score >= 60) return 'text-blue-600 font-semibold';
-  if (score >= 40) return 'text-yellow-600 font-semibold';
-  return 'text-red-600 font-semibold';
-}
-
 export function getScoreColorVariant(score: number): 'green' | 'yellow' | 'orange' | 'red' {
   if (score >= 80) return 'green';
-  if (score >= 60) return 'yellow';
-  if (score >= 40) return 'orange';
+  if (score >= 65) return 'yellow';
+  if (score >= 50) return 'orange';
   return 'red';
 }
 
@@ -148,7 +141,9 @@ export function formatCategoryName(key: string): string {
   };
   
   return categoryMap[key] || key.charAt(0).toUpperCase() + key.slice(1).replace(/_/g, ' ');
-}export function getConfidenceLevelVariant(level: string | undefined): 'green' | 'yellow' | 'red' | 'gray' {
+}
+
+export function getConfidenceLevelVariant(level: string | undefined): 'green' | 'yellow' | 'red' | 'gray' {
   switch (level) {
     case 'High':
       return 'green';
