@@ -22,8 +22,8 @@ import {
 } from '@/components/ui/alert-dialog';
 import type { JobAnalysisRow } from '@/lib/types';
 import {
-  getStatusBadgeVariant,
-  getRecommendationBadgeVariant,
+  getStatusOutlineVariant,
+  getRecommendationOutlineVariant,
   getFilterLabel,
   formatDateTimeBR,
 } from '@/lib/utils';
@@ -117,7 +117,7 @@ export default function JobsTable({ jobs }: JobsTableProps) {
               jobs.map((job) => (
                 <TableRow key={job.id}>
                   <TableCell className="text-center">
-                    <Badge variant={getStatusBadgeVariant(job.manualStatus)}>
+                    <Badge variant={getStatusOutlineVariant(job.manualStatus)}>
                       {getFilterLabel(MANUAL_STATUS_FILTERS, job.manualStatus)}
                     </Badge>
                   </TableCell>
@@ -200,11 +200,11 @@ export default function JobsTable({ jobs }: JobsTableProps) {
                   </TableCell>
                   <TableCell className="text-center">
                     {job.iaRecommendation ? (
-                      <Badge variant={getRecommendationBadgeVariant(job.iaRecommendation)}>
+                      <Badge variant={getRecommendationOutlineVariant(job.iaRecommendation)}>
                         {getFilterLabel(IA_RECOMMENDATION_FILTERS, job.iaRecommendation)}
                       </Badge>
                     ) : (
-                      <Badge variant="gray">N/A</Badge>
+                      <Badge variant="outline-gray">N/A</Badge>
                     )}
                   </TableCell>
                   <TableCell className="text-center">
@@ -219,11 +219,11 @@ export default function JobsTable({ jobs }: JobsTableProps) {
                   </TableCell>
                   <TableCell className="text-center">
                     {job.hasEasyApply ? (
-                      <Badge variant="green">
+                      <Badge variant="outline-green">
                         ✓ Sim
                       </Badge>
                     ) : (
-                      <Badge variant="gray">
+                      <Badge variant="outline-gray">
                         ✗ Não
                       </Badge>
                     )}
