@@ -278,22 +278,22 @@ export function getCompatibilityVariant(score: number): BadgeVariant {
 export const DONUT_CHART_COLORS = {
   red: {
     stroke: '#ef4444',
-    text: 'text-red-600',
+    text: 'text-red-800',
     bg: 'bg-red-50'
   },
   orange: {
     stroke: '#f97316',
-    text: 'text-orange-600',
+    text: 'text-orange-800',
     bg: 'bg-orange-50'
   },
   yellow: {
     stroke: '#eab308',
-    text: 'text-yellow-600',
+    text: 'text-yellow-800',
     bg: 'bg-yellow-50'
   },
   green: {
     stroke: '#22c55e',
-    text: 'text-green-600',
+    text: 'text-green-800',
     bg: 'bg-green-50'
   },
 } as const;
