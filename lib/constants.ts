@@ -265,8 +265,8 @@ export const PROGRESS_BAR_CLASSES: Record<string, string> = {
 
 export const COMPATIBILITY_SCORE_RANGES = [
   { max: 50, variant: 'red' as BadgeVariant },
-  { max: 70, variant: 'orange' as BadgeVariant },
-  { max: 85, variant: 'yellow' as BadgeVariant },
+  { max: 65, variant: 'orange' as BadgeVariant },
+  { max: 80, variant: 'yellow' as BadgeVariant },
   { max: 100, variant: 'green' as BadgeVariant },
 ] as const;
 
