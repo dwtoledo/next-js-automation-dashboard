@@ -131,6 +131,39 @@ export function getCompatibilityColor(score: number): string {
   return 'text-red-600 font-semibold';
 }
 
+export function getScoreColorVariant(score: number): 'green' | 'yellow' | 'orange' | 'red' {
+  if (score >= 80) return 'green';
+  if (score >= 60) return 'yellow';
+  if (score >= 40) return 'orange';
+  return 'red';
+}
+
+export function formatCategoryName(key: string): string {
+  const categoryMap: Record<string, string> = {
+    technical: 'Técnico',
+    experience: 'Experiência',
+    education: 'Educação',
+    soft_skills: 'Soft Skills',
+    cultural_fit: 'Fit Cultural',
+    language: 'Idiomas',
+  };
+  
+  return categoryMap[key] || key.charAt(0).toUpperCase() + key.slice(1).replace(/_/g, ' ');
+}
+
+export function getConfidenceLevelVariant(level: string | undefined): 'green' | 'yellow' | 'red' | 'gray' {
+  switch (level) {
+    case 'High':
+      return 'green';
+    case 'Medium':
+      return 'yellow';
+    case 'Low':
+      return 'red';
+    default:
+      return 'gray';
+  }
+}
+
 function parseNumericParam(value: string | undefined, defaultValue: number): number {
   if (!value) return defaultValue;
   const parsed = parseInt(value, 10);
