@@ -8,6 +8,7 @@ import { JobDetailHeader } from '@/components/JobDetailHeader';
 import { QuickVerdict } from '@/components/QuickVerdict';
 import { AnalysisSummary } from '@/components/AnalysisSummary';
 import { DetailedAnalysisTabs } from '@/components/DetailedAnalysisTabs';
+import { Linkedin, User } from 'lucide-react';
 
 interface JobDetailsPageProps {
   params: Promise<{
@@ -73,7 +74,9 @@ export default async function JobDetailsPage({ params }: JobDetailsPageProps) {
                 href={jobAnalysis.jobUrl}
                 target="_blank"
                 rel="noopener noreferrer"
+                className="flex items-center gap-2"
               >
+                <Linkedin className="h-4 w-4" />
                 Ver no LinkedIn
               </a>
             </Button>
@@ -83,7 +86,9 @@ export default async function JobDetailsPage({ params }: JobDetailsPageProps) {
                   href={jobAnalysis.recruiterUrl}
                   target="_blank"
                   rel="noopener noreferrer"
+                  className="flex items-center gap-2"
                 >
+                  <User className="h-4 w-4" />
                   Ver Recrutador
                 </a>
               </Button>
