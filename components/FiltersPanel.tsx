@@ -200,10 +200,10 @@ export default function FiltersPanel({ filterConfigs }: FiltersPanelProps) {
         selectedSeniorities.length > 0;
 
     return (
-        <Card className="mb-6 p-4">
-            <CardHeader>
+        <Card className="mb-6">
+            <CardHeader className={isExpanded ? "pb-0" : ""}>
                 <div className="flex items-center justify-between">
-                    <CardTitle className="flex items-center gap-2">
+                    <CardTitle className="flex items-center gap-2 text-base">
                         <Filter className="h-4 w-4" />
                         Filtros
                     </CardTitle>
@@ -213,16 +213,17 @@ export default function FiltersPanel({ filterConfigs }: FiltersPanelProps) {
                                 variant="ghost"
                                 size="sm"
                                 onClick={clearAllFilters}
-                                className="text-sm"
+                                className="text-sm h-8"
                             >
                                 <X className="h-4 w-4 mr-1" />
-                                Limpar filtros
+                                Limpar
                             </Button>
                         )}
                         <Button
                             variant="ghost"
                             size="sm"
                             onClick={() => setIsExpanded(!isExpanded)}
+                            className="h-8"
                         >
                             {isExpanded ? 'Recolher' : 'Expandir'}
                         </Button>
@@ -231,187 +232,192 @@ export default function FiltersPanel({ filterConfigs }: FiltersPanelProps) {
             </CardHeader>
 
             {isExpanded && (
-                <CardContent className="space-y-6">
-                    <div className="space-y-2">
-                        <Label htmlFor="search" className="flex items-center gap-2">
-                            <Search className="h-4 w-4" />
-                            Busca
-                        </Label>
-                        <Input
-                            id="search"
-                            type="text"
-                            placeholder="Buscar por título, empresa ou descrição..."
-                            value={searchTerm}
-                            onChange={(e) => handleSearchChange(e.target.value)}
-                            className="w-full"
-                        />
-                    </div>
-                    <div className="space-y-3">
-                        <div className="flex flex-col gap-3">
-                            <div className="flex items-center space-x-2">
-                                <Checkbox
-                                    id="isApplied"
-                                    checked={isApplied === true}
-                                    onCheckedChange={(checked) => {
-                                        if (checked === true) {
-                                            handleIsAppliedChange(true);
-                                        } else if (isApplied === true) {
-                                            handleIsAppliedChange('indeterminate');
-                                        }
-                                    }}
-                                />
-                                <label
-                                    htmlFor="isApplied"
-                                    className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer"
-                                >
-                                    Apenas vagas já aplicadas
-                                </label>
-                            </div>
-                            <div className="flex items-center space-x-2">
-                                <Checkbox
-                                    id="hasEasyApply"
-                                    checked={hasEasyApply === true}
-                                    onCheckedChange={(checked) => {
-                                        if (checked === true) {
-                                            handleHasEasyApplyChange(true);
-                                        } else if (hasEasyApply === true) {
-                                            handleHasEasyApplyChange('indeterminate');
-                                        }
-                                    }}
-                                />
-                                <label
-                                    htmlFor="hasEasyApply"
-                                    className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer"
-                                >
-                                    Apenas vagas com Easy Apply
-                                </label>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="space-y-2">
-                        <Label>Status Manual</Label>
-                        <div className="flex flex-wrap gap-2">
-                            {filterConfigs.manualStatusFilters.map((option) => (
-                                <Badge
-                                    key={option.value}
-                                    variant={
-                                        selectedStatuses.includes(option.value) ? 'default' : 'outline'
-                                    }
-                                    className="cursor-pointer"
-                                    onClick={() => toggleStatus(option.value)}
-                                    style={
-                                        selectedStatuses.includes(option.value)
-                                            ? { backgroundColor: option.color.split('bg-')[1]?.split(' ')[0] }
-                                            : {}
-                                    }
-                                >
-                                    {option.label}
-                                </Badge>
-                            ))}
-                        </div>
-                    </div>
-                    <div className="space-y-2">
-                        <Label>Recomendação IA</Label>
-                        <div className="flex flex-wrap gap-2">
-                            {filterConfigs.iaRecommendationFilters.map((option) => (
-                                <Badge
-                                    key={option.value}
-                                    variant={
-                                        selectedRecommendations.includes(option.value)
-                                            ? 'default'
-                                            : 'outline'
-                                    }
-                                    className="cursor-pointer"
-                                    onClick={() => toggleRecommendation(option.value)}
-                                    style={
-                                        selectedRecommendations.includes(option.value)
-                                            ? { backgroundColor: option.color.split('bg-')[1]?.split(' ')[0] }
-                                            : {}
-                                    }
-                                >
-                                    {option.label}
-                                </Badge>
-                            ))}
-                        </div>
-                    </div>
-                    <div className="space-y-2">
-                        <Label>Nível de Senioridade</Label>
-                        <div className="flex flex-wrap gap-2">
-                            {filterConfigs.seniorityLevelFilters.map((option) => (
-                                <Badge
-                                    key={option.value}
-                                    variant={
-                                        selectedSeniorities.includes(option.value) ? 'default' : 'outline'
-                                    }
-                                    className="cursor-pointer"
-                                    onClick={() => toggleSeniority(option.value)}
-                                    style={
-                                        selectedSeniorities.includes(option.value)
-                                            ? { backgroundColor: option.color.split('bg-')[1]?.split(' ')[0] }
-                                            : {}
-                                    }
-                                >
-                                    {option.label}
-                                </Badge>
-                            ))}
-                        </div>
-                    </div>
-                    <div className="space-y-4">
-                        <div className="flex items-center justify-between">
-                            <Label className="flex items-center gap-2">
-                                <Sliders className="h-4 w-4" />
-                                Compatibilidade (%)
+                <CardContent className="space-y-5 pt-6 pb-6">
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
+                        <div className="space-y-2">
+                            <Label htmlFor="search" className="flex items-center gap-1.5 text-sm">
+                                <Search className="h-3.5 w-3.5" />
+                                Busca
                             </Label>
-                            <span className="text-sm text-muted-foreground">
-                                {compatibilityRange[0]}% - {compatibilityRange[1]}%
-                            </span>
+                            <Input
+                                id="search"
+                                type="text"
+                                placeholder="Buscar por título, empresa ou descrição..."
+                                value={searchTerm}
+                                onChange={(e) => handleSearchChange(e.target.value)}
+                                className="h-9"
+                            />
                         </div>
-                        <Slider
-                            min={0}
-                            max={100}
-                            step={5}
-                            value={compatibilityRange}
-                            onValueChange={handleCompatibilityChange}
-                            className="w-full"
-                        />
-                    </div>
-                    <div className="space-y-4">
-                        <div className="flex items-center justify-between">
-                            <Label>Experiência (anos)</Label>
-                            <span className="text-sm text-muted-foreground">
-                                {experienceRange[0]} - {experienceRange[1]} anos
-                            </span>
-                        </div>
-                        <Slider
-                            min={0}
-                            max={20}
-                            step={1}
-                            value={experienceRange}
-                            onValueChange={handleExperienceChange}
-                            className="w-full"
-                        />
-                    </div>
-                    <div className="space-y-2">
-                        <Label className="flex items-center gap-2">
-                            <Calendar className="h-4 w-4" />
-                            Data de Criação
-                        </Label>
-                        <div className="flex items-center gap-4">
-                            <div className="flex-1">
+                        <div className="space-y-2">
+                            <Label className="flex items-center gap-1.5 text-sm">
+                                <Calendar className="h-3.5 w-3.5" />
+                                Datas
+                            </Label>
+                            <div className="flex items-center gap-2">
                                 <Input
                                     type="date"
                                     value={dateFrom}
                                     onChange={(e) => handleDateFromChange(e.target.value)}
+                                    className="h-9"
                                 />
-                            </div>
-                            <span className="text-gray-500">até</span>
-                            <div className="flex-1">
+                                <span className="text-xs text-muted-foreground">até</span>
                                 <Input
                                     type="date"
                                     value={dateTo}
                                     onChange={(e) => handleDateToChange(e.target.value)}
+                                    className="h-9"
                                 />
                             </div>
+                        </div>
+                    </div>
+                    <div className="space-y-3">
+                        <div className="flex items-center space-x-2">
+                            <Checkbox
+                                id="isApplied"
+                                checked={isApplied === true}
+                                onCheckedChange={(checked) => {
+                                    if (checked === true) {
+                                        handleIsAppliedChange(true);
+                                    } else if (isApplied === true) {
+                                        handleIsAppliedChange('indeterminate');
+                                    }
+                                }}
+                            />
+                            <label
+                                htmlFor="isApplied"
+                                className="text-sm leading-none cursor-pointer"
+                            >
+                                Apenas vagas já aplicadas
+                            </label>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                            <Checkbox
+                                id="hasEasyApply"
+                                checked={hasEasyApply === true}
+                                onCheckedChange={(checked) => {
+                                    if (checked === true) {
+                                        handleHasEasyApplyChange(true);
+                                    } else if (hasEasyApply === true) {
+                                        handleHasEasyApplyChange('indeterminate');
+                                    }
+                                }}
+                            />
+                            <label
+                                htmlFor="hasEasyApply"
+                                className="text-sm leading-none cursor-pointer"
+                            >
+                                Apenas vagas com Easy Apply
+                            </label>
+                        </div>
+                    </div>
+                    <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
+                        <div className="rounded-lg border bg-card p-5 space-y-3">
+                            <Label className="text-sm font-semibold">Status</Label>
+                            <div className="flex flex-wrap gap-2">
+                                {filterConfigs.manualStatusFilters.map((option) => (
+                                    <Badge
+                                        key={option.value}
+                                        variant={
+                                            selectedStatuses.includes(option.value) ? 'default' : 'outline'
+                                        }
+                                        className="cursor-pointer text-xs"
+                                        onClick={() => toggleStatus(option.value)}
+                                        style={
+                                            selectedStatuses.includes(option.value)
+                                                ? { backgroundColor: option.color.split('bg-')[1]?.split(' ')[0] }
+                                                : {}
+                                        }
+                                    >
+                                        {option.label}
+                                    </Badge>
+                                ))}
+                            </div>
+                        </div>
+
+                        <div className="rounded-lg border bg-card p-5 space-y-3">
+                            <Label className="text-sm font-semibold">Recomendação da IA</Label>
+                            <div className="flex flex-wrap gap-2">
+                                {filterConfigs.iaRecommendationFilters.map((option) => (
+                                    <Badge
+                                        key={option.value}
+                                        variant={
+                                            selectedRecommendations.includes(option.value)
+                                                ? 'default'
+                                                : 'outline'
+                                        }
+                                        className="cursor-pointer text-xs"
+                                        onClick={() => toggleRecommendation(option.value)}
+                                        style={
+                                            selectedRecommendations.includes(option.value)
+                                                ? { backgroundColor: option.color.split('bg-')[1]?.split(' ')[0] }
+                                                : {}
+                                        }
+                                    >
+                                        {option.label}
+                                    </Badge>
+                                ))}
+                            </div>
+                        </div>
+
+                        <div className="rounded-lg border bg-card p-5 space-y-3">
+                            <Label className="text-sm font-semibold">Nível de Senioridade</Label>
+                            <div className="flex flex-wrap gap-2">
+                                {filterConfigs.seniorityLevelFilters.map((option) => (
+                                    <Badge
+                                        key={option.value}
+                                        variant={
+                                            selectedSeniorities.includes(option.value) ? 'default' : 'outline'
+                                        }
+                                        className="cursor-pointer text-xs"
+                                        onClick={() => toggleSeniority(option.value)}
+                                        style={
+                                            selectedSeniorities.includes(option.value)
+                                                ? { backgroundColor: option.color.split('bg-')[1]?.split(' ')[0] }
+                                                : {}
+                                        }
+                                    >
+                                        {option.label}
+                                    </Badge>
+                                ))}
+                            </div>
+                        </div>
+                    </div>
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
+                        <div className="space-y-2">
+                            <div className="flex items-center justify-between">
+                                <Label className="flex items-center gap-1.5 text-sm">
+                                    <Sliders className="h-3.5 w-3.5" />
+                                    Compatibilidade
+                                </Label>
+                                <span className="text-xs text-muted-foreground">
+                                    {compatibilityRange[0]}% - {compatibilityRange[1]}%
+                                </span>
+                            </div>
+                            <Slider
+                                min={0}
+                                max={100}
+                                step={5}
+                                value={compatibilityRange}
+                                onValueChange={handleCompatibilityChange}
+                                className="w-full"
+                            />
+                        </div>
+
+                        <div className="space-y-2">
+                            <div className="flex items-center justify-between">
+                                <Label className="text-sm">Experiência</Label>
+                                <span className="text-xs text-muted-foreground">
+                                    {experienceRange[0]} - {experienceRange[1]} anos
+                                </span>
+                            </div>
+                            <Slider
+                                min={0}
+                                max={20}
+                                step={1}
+                                value={experienceRange}
+                                onValueChange={handleExperienceChange}
+                                className="w-full"
+                            />
                         </div>
                     </div>
                 </CardContent>
