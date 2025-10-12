@@ -3,7 +3,7 @@
 import { useRouter, usePathname, useSearchParams } from 'next/navigation';
 import { useCallback, useState, useEffect } from 'react';
 import { useDebouncedCallback } from 'use-debounce';
-import { Search, Filter, X, Calendar, Sliders } from 'lucide-react';
+import { Search, Filter, X, Calendar, Sliders, ChevronDown, ChevronUp } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -189,11 +189,18 @@ export default function FiltersPanel({ filterConfigs }: FiltersPanelProps) {
     return (
         <Card className="mb-6">
             <CardHeader className={isExpanded ? "pb-0" : ""}>
-                <div className="flex items-center justify-between">
-                    <CardTitle className="flex items-center gap-2 text-base">
-                        <Filter className="h-4 w-4" />
-                        Filtros
-                    </CardTitle>
+                <div className="flex items-center justify-between gap-4">
+                    <div className="flex-1 relative">
+                        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                        <Input
+                            id="search"
+                            type="text"
+                            placeholder="Buscar por título, empresa ou descrição..."
+                            value={searchTerm}
+                            onChange={(e) => handleSearchChange(e.target.value)}
+                            className="h-10 pl-10"
+                        />
+                    </div>
                     <div className="flex items-center gap-2">
                         {hasActiveFilters && (
                             <Button
@@ -207,12 +214,22 @@ export default function FiltersPanel({ filterConfigs }: FiltersPanelProps) {
                             </Button>
                         )}
                         <Button
-                            variant="ghost"
+                            variant="default"
                             size="sm"
                             onClick={() => setIsExpanded(!isExpanded)}
                             className="h-8"
                         >
-                            {isExpanded ? 'Recolher' : 'Expandir'}
+                            {isExpanded ? (
+                                <>
+                                    <ChevronUp className="h-4 w-4" />
+                                    Filtros avançados
+                                </>
+                            ) : (
+                                <>
+                                    <ChevronDown className="h-4 w-4" />
+                                    Filtros avançados
+                                </>
+                            )}
                         </Button>
                     </div>
                 </div>
@@ -221,20 +238,6 @@ export default function FiltersPanel({ filterConfigs }: FiltersPanelProps) {
             {isExpanded && (
                 <CardContent className="space-y-5 pt-6 pb-6">
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
-                        <div className="space-y-2">
-                            <Label htmlFor="search" className="flex items-center gap-1.5 text-sm">
-                                <Search className="h-3.5 w-3.5" />
-                                Busca
-                            </Label>
-                            <Input
-                                id="search"
-                                type="text"
-                                placeholder="Buscar por título, empresa ou descrição..."
-                                value={searchTerm}
-                                onChange={(e) => handleSearchChange(e.target.value)}
-                                className="h-9"
-                            />
-                        </div>
                         <div className="space-y-2">
                             <Label className="flex items-center gap-1.5 text-sm">
                                 <Calendar className="h-3.5 w-3.5" />
