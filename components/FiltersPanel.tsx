@@ -38,11 +38,6 @@ export default function FiltersPanel({ filterConfigs }: FiltersPanelProps) {
     const [dateFrom, setDateFrom] = useState(searchParams.get('dateFrom') || '');
     const [dateTo, setDateTo] = useState(searchParams.get('dateTo') || '');
 
-    const [isApplied, setIsApplied] = useState<boolean | undefined>(
-        searchParams.get('isApplied') === 'true' ? true : 
-        searchParams.get('isApplied') === 'false' ? false : 
-        undefined
-    );
     const [hasEasyApply, setHasEasyApply] = useState<boolean | undefined>(
         searchParams.get('hasEasyApply') === 'true' ? true : 
         searchParams.get('hasEasyApply') === 'false' ? false : 
@@ -131,12 +126,6 @@ export default function FiltersPanel({ filterConfigs }: FiltersPanelProps) {
         updateURL({ dateFrom: dateFrom || null, dateTo: value || null });
     };
 
-    const handleIsAppliedChange = (checked: boolean | 'indeterminate') => {
-        const newValue = checked === 'indeterminate' ? undefined : checked;
-        setIsApplied(newValue);
-        updateURL({ isApplied: newValue === undefined ? null : newValue.toString() });
-    };
-
     const handleHasEasyApplyChange = (checked: boolean | 'indeterminate') => {
         const newValue = checked === 'indeterminate' ? undefined : checked;
         setHasEasyApply(newValue);
@@ -175,7 +164,6 @@ export default function FiltersPanel({ filterConfigs }: FiltersPanelProps) {
         setExperienceRange([0, 20]);
         setDateFrom('');
         setDateTo('');
-        setIsApplied(undefined);
         setHasEasyApply(undefined);
         setSelectedStatuses(['PENDING']);
         setSelectedRecommendations([]);
@@ -193,7 +181,6 @@ export default function FiltersPanel({ filterConfigs }: FiltersPanelProps) {
         experienceRange[1] !== 20 ||
         dateFrom ||
         dateTo ||
-        isApplied !== undefined ||
         hasEasyApply !== undefined ||
         !(selectedStatuses.length === 1 && selectedStatuses[0] === 'PENDING') ||
         selectedRecommendations.length > 0 ||
@@ -271,25 +258,6 @@ export default function FiltersPanel({ filterConfigs }: FiltersPanelProps) {
                         </div>
                     </div>
                     <div className="space-y-3">
-                        <div className="flex items-center space-x-2">
-                            <Checkbox
-                                id="isApplied"
-                                checked={isApplied === true}
-                                onCheckedChange={(checked) => {
-                                    if (checked === true) {
-                                        handleIsAppliedChange(true);
-                                    } else if (isApplied === true) {
-                                        handleIsAppliedChange('indeterminate');
-                                    }
-                                }}
-                            />
-                            <label
-                                htmlFor="isApplied"
-                                className="text-sm leading-none cursor-pointer"
-                            >
-                                Apenas vagas já aplicadas
-                            </label>
-                        </div>
                         <div className="flex items-center space-x-2">
                             <Checkbox
                                 id="hasEasyApply"

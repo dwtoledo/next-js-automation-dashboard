@@ -375,14 +375,9 @@ function buildDateRangeFilter(
 }
 
 function buildBooleanFilter(
-  isApplied: boolean | undefined,
   hasEasyApply: boolean | undefined
 ): Prisma.JobAnalysisWhereInput {
   const where: Prisma.JobAnalysisWhereInput = {};
-
-  if (isApplied !== undefined) {
-    where.isApplied = isApplied;
-  }
 
   if (hasEasyApply !== undefined) {
     where.hasEasyApply = hasEasyApply;
@@ -477,7 +472,7 @@ export function buildPrismaQuery(searchParams: JobAnalysisSearchParams) {
     buildCompatibilityFilter(searchParams.minCompatibility, searchParams.maxCompatibility),
     buildExperienceFilter(searchParams.minExperience, searchParams.maxExperience),
     buildDateRangeFilter(searchParams.dateFrom, searchParams.dateTo),
-    buildBooleanFilter(searchParams.isApplied, searchParams.hasEasyApply),
+    buildBooleanFilter(searchParams.hasEasyApply),
   ];
 
   const where = mergeWhereConditions(filterConditions);
@@ -496,7 +491,6 @@ export function buildPrismaQuery(searchParams: JobAnalysisSearchParams) {
 export function parseSearchParams(rawParams: Record<string, string | undefined>): JobAnalysisSearchParams {
   return {
     search: rawParams.search,
-    isApplied: parseBooleanParam(rawParams.isApplied),
     hasEasyApply: parseBooleanParam(rawParams.hasEasyApply),
     manualStatus: rawParams.manualStatus,
     seniority: rawParams.seniority,
