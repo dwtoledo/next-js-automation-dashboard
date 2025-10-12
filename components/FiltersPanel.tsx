@@ -39,9 +39,9 @@ export default function FiltersPanel({ filterConfigs }: FiltersPanelProps) {
     const [dateTo, setDateTo] = useState(searchParams.get('dateTo') || '');
 
     const [hasEasyApply, setHasEasyApply] = useState<boolean | undefined>(
-        searchParams.get('hasEasyApply') === 'true' ? true : 
-        searchParams.get('hasEasyApply') === 'false' ? false : 
-        undefined
+        searchParams.get('hasEasyApply') === 'true' ? true :
+            searchParams.get('hasEasyApply') === 'false' ? false :
+                undefined
     );
 
     const [selectedStatuses, setSelectedStatuses] = useState<string[]>(
@@ -237,29 +237,6 @@ export default function FiltersPanel({ filterConfigs }: FiltersPanelProps) {
 
             {isExpanded && (
                 <CardContent className="space-y-5 pt-6 pb-6">
-                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
-                        <div className="space-y-2">
-                            <Label className="flex items-center gap-1.5 text-sm">
-                                <Calendar className="h-3.5 w-3.5" />
-                                Datas
-                            </Label>
-                            <div className="flex items-center gap-2">
-                                <Input
-                                    type="date"
-                                    value={dateFrom}
-                                    onChange={(e) => handleDateFromChange(e.target.value)}
-                                    className="h-9"
-                                />
-                                <span className="text-xs text-muted-foreground">até</span>
-                                <Input
-                                    type="date"
-                                    value={dateTo}
-                                    onChange={(e) => handleDateToChange(e.target.value)}
-                                    className="h-9"
-                                />
-                            </div>
-                        </div>
-                    </div>
                     <div className="space-y-3">
                         <div className="flex items-center space-x-2">
                             <Checkbox
@@ -281,6 +258,7 @@ export default function FiltersPanel({ filterConfigs }: FiltersPanelProps) {
                             </label>
                         </div>
                     </div>
+
                     <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
                         <div className="rounded-lg border bg-card p-5 space-y-3">
                             <Label className="text-sm font-semibold">Status</Label>
@@ -353,42 +331,77 @@ export default function FiltersPanel({ filterConfigs }: FiltersPanelProps) {
                             </div>
                         </div>
                     </div>
+
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
-                        <div className="space-y-2">
-                            <div className="flex items-center justify-between">
-                                <Label className="flex items-center gap-1.5 text-sm">
-                                    <Sliders className="h-3.5 w-3.5" />
-                                    Compatibilidade
-                                </Label>
-                                <span className="text-xs text-muted-foreground">
-                                    {compatibilityRange[0]}% - {compatibilityRange[1]}%
-                                </span>
+                        <div className="rounded-lg border bg-card p-5 space-y-4">
+                            <Label className="text-sm font-semibold">
+                                <Sliders className="h-3.5 w-3.5" />
+                                Intervalos
+                            </Label>
+                            <div className="space-y-4">
+                                <div className="space-y-2">
+                                    <div className="flex items-center justify-between">
+                                        <Label className="flex items-center gap-1.5 text-sm font-normal">
+                                            Compatibilidade
+                                        </Label>
+                                        <span className="text-xs text-muted-foreground">
+                                            {compatibilityRange[0]}% - {compatibilityRange[1]}%
+                                        </span>
+                                    </div>
+                                    <Slider
+                                        min={0}
+                                        max={100}
+                                        step={5}
+                                        value={compatibilityRange}
+                                        onValueChange={handleCompatibilityChange}
+                                        className="w-full"
+                                    />
+                                </div>
+
+                                <div className="space-y-2">
+                                    <div className="flex items-center justify-between">
+                                        <Label className="text-sm font-normal">Experiência</Label>
+                                        <span className="text-xs text-muted-foreground">
+                                            {experienceRange[0]} - {experienceRange[1]} anos
+                                        </span>
+                                    </div>
+                                    <Slider
+                                        min={0}
+                                        max={20}
+                                        step={1}
+                                        value={experienceRange}
+                                        onValueChange={handleExperienceChange}
+                                        className="w-full"
+                                    />
+                                </div>
                             </div>
-                            <Slider
-                                min={0}
-                                max={100}
-                                step={5}
-                                value={compatibilityRange}
-                                onValueChange={handleCompatibilityChange}
-                                className="w-full"
-                            />
                         </div>
 
-                        <div className="space-y-2">
-                            <div className="flex items-center justify-between">
-                                <Label className="text-sm">Experiência</Label>
-                                <span className="text-xs text-muted-foreground">
-                                    {experienceRange[0]} - {experienceRange[1]} anos
-                                </span>
+                        <div className="rounded-lg border bg-card p-5 space-y-3">
+                            <Label className="text-sm font-semibold flex items-center gap-1.5">
+                                <Calendar className="h-3.5 w-3.5" />
+                                Período
+                            </Label>
+                            <div className="space-y-2">
+                                <div className="space-y-1.5">
+                                    <Label className="text-xs text-muted-foreground font-normal">Data inicial</Label>
+                                    <Input
+                                        type="date"
+                                        value={dateFrom}
+                                        onChange={(e) => handleDateFromChange(e.target.value)}
+                                        className="h-9"
+                                    />
+                                </div>
+                                <div className="space-y-1.5">
+                                    <Label className="text-xs text-muted-foreground font-normal">Data final</Label>
+                                    <Input
+                                        type="date"
+                                        value={dateTo}
+                                        onChange={(e) => handleDateToChange(e.target.value)}
+                                        className="h-9"
+                                    />
+                                </div>
                             </div>
-                            <Slider
-                                min={0}
-                                max={20}
-                                step={1}
-                                value={experienceRange}
-                                onValueChange={handleExperienceChange}
-                                className="w-full"
-                            />
                         </div>
                     </div>
                 </CardContent>
