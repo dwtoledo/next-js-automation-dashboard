@@ -10,6 +10,7 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
+import { Checkbox } from '@/components/ui/checkbox';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -42,6 +43,7 @@ interface JobsTableProps {
 export default function JobsTable({ jobs }: JobsTableProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const [selectedJobs, setSelectedJobs] = useState<Set<string>>(new Set());
   const [ignoringJobs, setIgnoringJobs] = useState<Set<string>>(new Set());
   const [jobToIgnore, setJobToIgnore] = useState<{ id: string; title: string } | null>(null);
 
@@ -102,6 +104,25 @@ export default function JobsTable({ jobs }: JobsTableProps) {
         <Table>
           <TableHeader>
             <TableRow>
+              <TableHead className="text-center w-10">
+                <Checkbox 
+                  checked={
+                    jobs.length > 0 && selectedJobs.size === jobs.length
+                      ? true
+                      : selectedJobs.size > 0 && selectedJobs.size < jobs.length
+                      ? 'indeterminate'
+                      : false
+                  }
+                  onCheckedChange={(checked) => {
+                    if (checked) {
+                      setSelectedJobs(new Set(jobs.map((job) => job.id)));
+                    } else {
+                      setSelectedJobs(new Set());
+                    }
+                  }}
+                  aria-label="Selecionar todas as vagas"
+                />
+              </TableHead>
               <SortableHeader field="overallCompatibility" onSort={handleSort}>Compatibilidade</SortableHeader>
               <TableHead>Vaga</TableHead>
               <TableHead className="text-center">Status</TableHead>
@@ -114,7 +135,28 @@ export default function JobsTable({ jobs }: JobsTableProps) {
           <TableBody>
             {jobs.length > 0 ? (
               jobs.map((job) => (
-                <TableRow key={job.id}>
+                <TableRow
+                  key={job.id}
+                  data-state={selectedJobs.has(job.id) ? 'selected' : undefined}
+                  className="[&[data-state=selected]]:bg-muted/50"
+                >
+                  <TableCell className="text-center">
+                    <Checkbox
+                      checked={selectedJobs.has(job.id)}
+                      onCheckedChange={(checked) => {
+                        setSelectedJobs((prev) => {
+                          const next = new Set(prev);
+                          if (checked) {
+                            next.add(job.id);
+                          } else {
+                            next.delete(job.id);
+                          }
+                          return next;
+                        });
+                      }}
+                      aria-label={`Selecionar vaga ${job.jobTitle}`}
+                    />
+                  </TableCell>
                   <TableCell className="text-center">
                     <div className="flex justify-center">
                       <CompatibilityDonut score={job.overallCompatibility} size="md" showLabel={false} />
@@ -238,7 +280,7 @@ export default function JobsTable({ jobs }: JobsTableProps) {
               ))
             ) : (
               <TableRow>
-                <TableCell colSpan={7} className="text-center py-8 text-gray-500">
+                <TableCell colSpan={8} className="text-center py-8 text-gray-500">
                   Nenhuma vaga pendente encontrada.
                 </TableCell>
               </TableRow>
