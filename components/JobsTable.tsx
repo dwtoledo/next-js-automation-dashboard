@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import {
   Table,
   TableBody,
@@ -46,6 +46,10 @@ export default function JobsTable({ jobs }: JobsTableProps) {
   const [selectedJobs, setSelectedJobs] = useState<Set<string>>(new Set());
   const [ignoringJobs, setIgnoringJobs] = useState<Set<string>>(new Set());
   const [jobToIgnore, setJobToIgnore] = useState<{ id: string; title: string } | null>(null);
+
+  useEffect(() => {
+    setSelectedJobs(new Set());
+  }, [jobs]);
 
   const handleSort = (field: string) => {
     const params = new URLSearchParams(searchParams.toString());
