@@ -81,3 +81,51 @@ export async function updateJobDetails({
     };
   }
 }
+
+export async function updateMultipleJobStatuses({
+  jobIds,
+  newStatus,
+  newNotes,
+}: {
+  jobIds: string[];
+  newStatus: ManualStatus;
+  newNotes: string;
+}) {
+  if (!jobIds || jobIds.length === 0) {
+    return { success: false, error: 'Nenhuma vaga selecionada' };
+  }
+
+  try {
+    const sanitizedNotes = newNotes
+      .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '')
+      .replace(/<[^>]+>/g, '')
+      .trim();
+
+    if (sanitizedNotes.length > 2000) {
+      return {
+        success: false,
+        error: 'Anotações excedem 2000 caracteres',
+      };
+    }
+
+    await prisma.jobAnalysis.updateMany({
+      where: {
+        id: {
+          in: jobIds,
+        },
+      },
+      data: {
+        manualStatus: newStatus,
+        manualNotes: sanitizedNotes,
+        manualDecisionAt: new Date(),
+      },
+    });
+
+    revalidatePath('/dashboard');
+
+    return { success: true };
+  } catch (error) {
+    console.error('Error updating multiple job statuses:', error);
+    return { success: false, error: 'Falha ao atualizar vagas' };
+  }
+}
