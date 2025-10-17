@@ -1,9 +1,8 @@
 import type { Metadata } from "next";
 import prisma from '@/lib/prisma';
 import { buildPrismaQuery, transformJobAnalysis, parseSearchParams } from '@/lib/utils';
-import JobsTable from '@/components/JobsTable';
 import FiltersPanel from '@/components/FiltersPanel';
-import PaginationControls from '@/components/PaginationControls';
+import DashboardClientWrapper from '@/components/DashboardClientWrapper';
 import {
   MANUAL_STATUS_FILTERS,
   IA_RECOMMENDATION_FILTERS,
@@ -54,9 +53,8 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
     <div className="container mx-auto p-6">
       <FiltersPanel filterConfigs={filterConfigs} />
 
-      <JobsTable jobs={jobRows} />
-
-      <PaginationControls
+      <DashboardClientWrapper
+        jobs={jobRows}
         currentPage={currentPage}
         totalPages={totalPages}
         totalCount={totalCount}

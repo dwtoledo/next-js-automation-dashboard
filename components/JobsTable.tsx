@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import {
   Table,
   TableBody,
@@ -38,18 +38,15 @@ import CompatibilityDonut from '@/components/CompatibilityDonut';
 
 interface JobsTableProps {
   jobs: JobAnalysisRow[];
+  selectedJobs: Set<string>;
+  onSelectionChange: (newSelection: Set<string>) => void;
 }
 
-export default function JobsTable({ jobs }: JobsTableProps) {
+export default function JobsTable({ jobs, selectedJobs, onSelectionChange }: JobsTableProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const [selectedJobs, setSelectedJobs] = useState<Set<string>>(new Set());
   const [ignoringJobs, setIgnoringJobs] = useState<Set<string>>(new Set());
   const [jobToIgnore, setJobToIgnore] = useState<{ id: string; title: string } | null>(null);
-
-  useEffect(() => {
-    setSelectedJobs(new Set());
-  }, [jobs]);
 
   const handleSort = (field: string) => {
     const params = new URLSearchParams(searchParams.toString());
@@ -119,9 +116,9 @@ export default function JobsTable({ jobs }: JobsTableProps) {
                   }
                   onCheckedChange={(checked) => {
                     if (checked) {
-                      setSelectedJobs(new Set(jobs.map((job) => job.id)));
+                      onSelectionChange(new Set(jobs.map((job) => job.id)));
                     } else {
-                      setSelectedJobs(new Set());
+                      onSelectionChange(new Set());
                     }
                   }}
                   aria-label="Selecionar todas as vagas"
@@ -148,15 +145,13 @@ export default function JobsTable({ jobs }: JobsTableProps) {
                     <Checkbox
                       checked={selectedJobs.has(job.id)}
                       onCheckedChange={(checked) => {
-                        setSelectedJobs((prev) => {
-                          const next = new Set(prev);
-                          if (checked) {
-                            next.add(job.id);
-                          } else {
-                            next.delete(job.id);
-                          }
-                          return next;
-                        });
+                        const newSelection = new Set(selectedJobs);
+                        if (checked) {
+                          newSelection.add(job.id);
+                        } else {
+                          newSelection.delete(job.id);
+                        }
+                        onSelectionChange(newSelection);
                       }}
                       aria-label={`Selecionar vaga ${job.jobTitle}`}
                     />
