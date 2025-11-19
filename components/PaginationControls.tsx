@@ -3,6 +3,13 @@
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight } from 'lucide-react';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
 
 interface PaginationControlsProps {
   currentPage: number;
@@ -17,6 +24,13 @@ export default function PaginationControls({ currentPage, totalPages, totalCount
   const handlePageChange = (newPage: number) => {
     const params = new URLSearchParams(searchParams.toString());
     params.set('page', newPage.toString());
+    router.push(`?${params.toString()}`);
+  };
+
+  const handleLimitChange = (newLimit: string) => {
+    const params = new URLSearchParams(searchParams.toString());
+    params.set('limit', newLimit);
+    params.set('page', '1');
     router.push(`?${params.toString()}`);
   };
 
@@ -56,17 +70,7 @@ export default function PaginationControls({ currentPage, totalPages, totalCount
     return pages;
   };
 
-  if (totalPages <= 1) {
-    return (
-      <div className="flex items-center justify-between px-2 py-4">
-        <div className="text-sm text-gray-700">
-          Mostrando <span className="font-medium">{startItem}</span> a{' '}
-          <span className="font-medium">{endItem}</span> de{' '}
-          <span className="font-medium">{totalCount}</span> resultados
-        </div>
-      </div>
-    );
-  }
+
 
   return (
     <div className="flex flex-col sm:flex-row items-center justify-between gap-4 px-2 py-4">
@@ -76,7 +80,28 @@ export default function PaginationControls({ currentPage, totalPages, totalCount
         <span className="font-medium">{totalCount}</span> resultados
       </div>
 
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-6">
+        <div className="flex items-center gap-2">
+          <p className="text-sm font-medium">Vagas por página:</p>
+          <Select
+            value={limit.toString()}
+            onValueChange={handleLimitChange}
+          >
+            <SelectTrigger className="h-8 w-[70px]">
+              <SelectValue placeholder={limit.toString()} />
+            </SelectTrigger>
+            <SelectContent side="top">
+              {[10, 20, 30, 40, 50].map((pageSize) => (
+                <SelectItem key={pageSize} value={`${pageSize}`}>
+                  {pageSize}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+
+        {totalPages > 1 && (
+        <div className="flex items-center gap-2">
         <Button
           variant="outline"
           size="sm"
@@ -139,6 +164,8 @@ export default function PaginationControls({ currentPage, totalPages, totalCount
         >
           <ChevronsRight className="h-4 w-4" />
         </Button>
+      </div>
+      )}
       </div>
     </div>
   );
